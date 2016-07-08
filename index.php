@@ -20,8 +20,7 @@ else
 }
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 	<head>
 		<title>OSSEC Web Interface - Open Source Security</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -29,30 +28,20 @@ else
 		<meta name="copyright" content="2006-2008 by Daniel B. Cid ossec.net" />
 		<meta name="keywords" content="ids, ossec, hids, free software" />
 		<meta name="description" content="OSSEC Web Interface" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <?php
-        
         /* If we are in the main page, refresh the results every 90 seconds.*/
         if($USER_f == "m")
         {
             echo '<meta http-equiv="refresh" content="90" />';
         }
         ?>
-        <link rel="shortcut icon" href="css/images/favicon.ico" />
-        <link rel="stylesheet" type="text/css" media="all" 
-              href="css/cal.css" title="css/cal.css" />
-        <script type="text/javascript" src="js/calendar.js"></script>
-        <script type="text/javascript" src="js/calendar-en.js"></script>
-        <script type="text/javascript" src="js/calendar-setup.js"></script>
-        <script type="text/javascript" src="js/prototype.js"></script>
-        <script type="text/javascript" src="js/hide.js"></script>
-        
-        <link rel="stylesheet" rev="stylesheet"
-                      href="css/css.css" type="text/css" />
+        <link rel="shortcut icon" href="img/favicon.ico" />
+        <script type="text/javascript"  data-main="js/main.js" src="js/require.js"></script>
+        <link rel="stylesheet" href="css/materialize.min.css" type="text/css" />
 	</head>
     
-<body>
-<br/>
-
+<body class="grey lighten-1">
 
 <?php 
     /* Defining the error messages */
@@ -69,11 +58,9 @@ else
 ?>
 
   <div id="container">
-    <div id="content_box">
-    <div id="content" class="pages">
-    <a name="top"></a>
 
-			<!-- BEGIN: content -->
+
+<!-- BEGIN: content -->
 
             <?php
 
@@ -166,9 +153,6 @@ else
 
 
     <!-- END: content -->
-    <br /><br />
-    <br /><br />
-    </div>
     </div>
 
 <?php
@@ -180,6 +164,6 @@ else
         return(1);
     }
 ?>
-    </div>
+
 </body>
 </html>

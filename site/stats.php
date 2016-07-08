@@ -102,14 +102,15 @@ else
 
 
 /* Day option */
-echo "<h2>Stats options:</h2><br />\n";
-echo '
+echo '<div class="row">';
+echo '<form name="dosearch" method="post" action="index.php?f=t">'
+    . '<div class="input-field col s3">'
+    . '<select name="day">';
 
-<form name="dosearch" method="post" action="index.php?f=t">
+$option = '<option value="%s" %s>%s</option>';
 
-Day:  <select name="day" class="formSelect">
-    <option value="0">All days</option>
-';
+echo sprintf($option, 0, "", "All days");
+
 for($l_counter = 1; $l_counter <= 31 ; $l_counter++)
 {
     $tmp_msg = '';
@@ -117,15 +118,14 @@ for($l_counter = 1; $l_counter <= 31 ; $l_counter++)
     {
         $tmp_msg = ' selected="selected"';
     }
-    echo '   <option value="'.$l_counter.'"'.$tmp_msg.'>'.
-         $l_counter.'</option>';
+    echo sprintf($option, $l_counter, $tmp_msg, $l_counter);
 }
-echo '  </select>';
+echo '</select><label>Day</label></div>';
 
 
 /* Monthly */
-echo ' Month: <select name="month" class="formSelect">
-    ';
+echo '<div class="input-field col s3">'
+    . '<select name="month">';
 $months = array("January" => "Jan", 
                 "February" => "Feb", 
                 "March" => "Mar", 
@@ -152,19 +152,22 @@ foreach($months as $tmp_month => $tmp_month_v)
     }
     $mnt_ct++;
 }
-echo '  </select>';
+echo '</select><label>Month</label></div>';
 
 
 /* Year */
-echo ' Year: <select name="year" class="formSelect">
-    <option value="'.$curr_year.'" selected="selected">'.$curr_year.'</option>
+echo '<div class="input-field col s3">'
+    . '<select name="year">';
+
+echo '<option value="'.$curr_year.'" selected="selected">'.$curr_year.'</option>
     <option value="'.($curr_year-1).'">'.($curr_year-1).'</option>
     <option value="'.($curr_year-2).'">'.($curr_year-2).'</option>
     ';
-echo '  </select> <input type="submit" name="Stats" value="Change options" class="button" /></form>';
+echo '</select><label>Year</label></div>'
+. '<div class="col s3"><input type="submit" name="Stats" value="Change options" class="btn" /></div></form></div>';
 
 
-
+echo '<div class="row"><div class="col s3">';
 /* Getting daily stats */
 $l_year_month = date('Y/M', $init_time);
 
@@ -179,25 +182,19 @@ if(isset($stats_list{$l_year_month}{$USER_day}))
 
 if(!isset($daily_stats{'total'}))
 {
-    echo '<br />
-        <b class="red">No stats available.</b>';
+    echo '<b class="red-text">No stats available.</b>';
     return(1);
-}
-else
-{
-    echo '<br />';
-}
-        
+}      
 
 /* Day 0 == month stats */
 if($USER_day == 0)
 {
-    echo "<h2>Ossec Stats for: <b id='blue'>".$l_year_month."</b></h2><br />\n";
+    echo '<h5 class="topt">Ossec Stats for: <b class="blue-text text-darken-2">'.$l_year_month.'</b></h5>';
 }
 else
 {
-    echo "<h2>Ossec Stats for: <b id='blue'>".$l_year_month.
-         "/".$USER_day."</b> </h2><br /><br />\n\n";
+    echo '<h5 class="topt">Ossec Stats for: <b class="blue-text text-darken-2">'.$l_year_month.
+         '/'.$USER_day.'</b></h5>';
 }
 
 echo '<b>Total</b>: '.number_format($daily_stats{'total'}).'<br />';
@@ -210,18 +207,18 @@ if($USER_day != 0)
     echo '<b>Average</b>: '.sprintf("%.01f", $h_avg).' events per hour.';
 }
 
-echo '<br /><br />';
-echo '<br /><div class="statssmall">';
-echo '
-<table align="center"><tr valign="top"><td width="50%">
+echo '</div>';
+echo '<div class="col s3">';
 
-<table summary="Total values">
-    <caption><strong>Aggregate values by severity</strong></caption>
+echo '<h5 class="topt">Aggregate values by severity</h5>';
+echo '<table class="responsive-table bordered">
+    <thead>
     <tr>
-    <th>Option</th>
+    <th>Level</th>
     <th>Value</th>
     <th>Percentage</th>
     </tr>
+    <thead>
 ';
 
 if( array_key_exists( 'level', $daily_stats ) ) {
@@ -271,18 +268,20 @@ echo '
 <td>'.number_format($daily_stats{'alerts'}).'</td>
 <td>100%</td>
 </tr>
-</table>
+</table>';
 
-</td>
+echo '</div>';
+echo '<div class="col s3">';
 
-<td width="50%">
-<table summary="Total values">
-    <caption><strong>Aggregate values by rule</strong></caption>
+echo '<h5 class="topt">Aggregate values by rule</h5>';
+echo '<table class="responsive-table bordered">
+    <thead>
     <tr>
-    <th>Option</th>
+    <th>Rules</th>
     <th>Value</th>
     <th>Percentage</th>
     </tr>
+    <thead>
 ';
 
 
@@ -304,7 +303,7 @@ if( array_key_exists( 'rule', $daily_stats ) ) {
 	    $odd_count++;
 	    echo '
 	    <tr'.$odd_msg.'>
-	    <td>Total for Rule '.$l_rule.'</td>
+	    <td>'.$l_rule.'</td>
 	    <td>'.number_format($v_rule).'</td>
 	    <td>'.sprintf("%.01f", $rule_pct).'%</td>
 	    </tr>
@@ -321,26 +320,24 @@ else
 }
 echo '
 <tr'.$odd_msg.'>
-<td>Total for all rules</td>
+<td>Total</td>
 <td>'.number_format($daily_stats{'alerts'}).'</td>
 <td>100%</td>
 </tr>
 ';
 
-echo '
-</table>
-</td></tr></table>
-';
+echo '</table>';
+echo '</div></div>';
+echo '<div class="row"><div class="col s12">';
 
 
 /* Monthly stats */
 if($USER_day == 0)
 {
+    echo '<h5 class="topt">Total values per Day</h5>';
 echo '
-
-        <br /><br />
-        <table align="center" summary="Total by day">
-        <caption><strong>Total values per Day</strong></caption>
+        <table class="responsive-table bordered">
+        <thead>
         <tr>
         <th>Day</th>
         <th>Alerts</th>
@@ -352,6 +349,7 @@ echo '
         <th>Total</th>
         <th>Total %</th>
         </tr>
+        </thead>
         ';
 
     $odd_count = 0;
@@ -414,11 +412,10 @@ echo '
 /* Daily stats */
 else
 {
+    echo '<h5 class="topt">Total values per hour</h5>';
     echo '
-
-        <br /><br />
-        <table align="center" summary="Total by hour">
-        <caption><strong>Total values per hour</strong></caption>
+        <table class="responsive-table bordered">
+        <thead>
         <tr>
         <th>Hour</th>
         <th>Alerts</th>
@@ -430,6 +427,7 @@ else
         <th>Total</th>
         <th>Total %</th>
         </tr>
+        </thead>
         ';
 
     $odd_count = 0;
@@ -479,9 +477,9 @@ else
     }
 }
 
-echo '
-</table></div>
-';
+echo '</table></div>';
 
+echo '</div></div>';
+echo '<div class="row"><div class="col s12">';
 
 ?>

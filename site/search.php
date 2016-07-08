@@ -289,27 +289,39 @@ $agent_list = os_getagents($ossec_handle);
 
 
 //echo '<a href="?f=sf">Firewall Search</a> - <a href="?f=s">Alerts Search</a>';
-echo "<h2>Alert search options:</h2>\n";
+//echo "<h2>Alert search options:</h2>\n";
+echo '<form name="dosearch" method="post" action="index.php?f=s">';
+echo '<div class="row"><div class="col s12">';
+echo '<div class="row"><div class="col s2"><p>
+        <input name="monitoring" type="radio" value="0" id="monf" checked="checked"/>
+        <label for="monf">Date</label>
+      </p></div>'
+      .'<div class="col s3"><input type="date" name="initdate" id="i_date_a" value="'.date('Y-m-d H:i', $u_init_time).'"/><label for="i_date_a">From</label></div>'
+      .'<div class="col s3"><input type="date" name="finaldate" id="f_date_a" value="'.date('Y-m-d H:i', $u_final_time).'"/><label for="d">To</label></div>'
+      .'</div>';
+
+echo '<div class="row"><div class="col s2"><p>
+        <input name="monitoring" type="radio" value="1" id="monr"/>
+        <label for="monr">Real time monitoring</label>
+      </p></div>';
+
+echo '</div></div></form>';
 
 
 /* Search forms */
-echo '
+/*echo '
 <form name="dosearch" method="post" action="index.php?f=s">
 <table><tr valign="top">
     <td><input type="radio" name="monitoring" value="0" checked="checked"/>
     </td>
-    <td>From: &nbsp;<input type="text" name="initdate"
+    <td>From: &nbsp;<input type="date" name="initdate"
     id="i_date_a" size="17"
     value="'.date('Y-m-d H:i', $u_init_time).'" maxlength="16"
     class="formText" />
-    <img src="img/calendar.gif" id="i_trigger" title="Date selector"
-    alt="Date selector" class="formText" />
     </td><td>&nbsp;&nbsp;
-    To: &nbsp;<input type="text" name="finaldate" id="f_date_a" size="17"
+    To: &nbsp;<input type="date" name="finaldate" id="f_date_a" size="17"
     value="'.date('Y-m-d H:i', $u_final_time).'" maxlength="16"
     class="formText" />
-    <img src="img/calendar.gif" id="f_trigger" title="Date selector"
-    alt="Date selector" class="formText" />
     </td>
     </tr>
 ';
@@ -319,7 +331,7 @@ echo '<tr><td><input type="radio" name="monitoring" value="1" '.$rt_sk.'/></td>
       </table>
       <br />
       <table>
-     ';
+     ';*/
 
 echo '<tr><td>Minimum level:</td><td><select name="level" class="formText">';
 if($u_level == 1)
@@ -454,7 +466,7 @@ echo '</td></tr></table>
 
 
 /* Java script for date */
-echo '
+/*echo '
 <script type="text/javascript">
 Calendar.setup({
 button          :   "i_trigger",
@@ -472,7 +484,7 @@ timeFormat     :    "24"
 });
 </script>
 
-';
+';*/
 
 echo "<h2>Results:</h2>\n";
 

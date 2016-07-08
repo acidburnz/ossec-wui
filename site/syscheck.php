@@ -58,13 +58,13 @@ if($ossec_handle == NULL)
 /* Getting syscheck information */
 $syscheck_list = os_getsyscheck($ossec_handle);
 
-
 /* Creating form */
-echo '
-<form name="dosearch" method="post" action="index.php?f=i">
-<table><tr valign="top">
-<td>
-Agent name: </td><td><select name="agentpattern" class="formText">';
+echo '<div class="row">';
+echo '<form name="dosearch" method="post" action="index.php?f=i">'
+    . '<div class="input-field col s3 blue-text text-darken-2">'
+    . '<select name="agentpattern">';
+
+$option = '<option value="%s" %s>%s</option>';
 
 foreach($syscheck_list as $agent => $agent_name)
 {
@@ -77,28 +77,14 @@ foreach($syscheck_list as $agent => $agent_name)
     {
         $sl = ' selected="selected"';
     }
-    echo '<option value="'.$agent.'" '.$sl.
-         '> &nbsp; '.$agent.'</option>
-         ';
+    echo sprintf($option, $agent, $sl, $agent);
 }
 
-echo '</select></td>';
+echo '</select><label>Agent Name</label></div>';
 
-echo '     
-    <td><input type="submit" name="ss" value="Dump database" class="button"/>';
+echo '<div class="col s4"><input type="submit" name="ss" value="Dump database" class="btn"/>';
+echo '</div></form></div>';
 
-if($USER_agent != NULL)
-{
-    echo ' &nbsp; &nbsp;<a class="bluez" href="index.php?f=i"> &lt;&lt;back</a>';
-}
-
-echo '           
-    </td>
-    </tr></table>
-    </form>
-    ';          
-
-      
 /* Dumping database */
 if( array_key_exists( 'ss', $_POST ) ) {
     if(($_POST['ss'] == "Dump database") && ($USER_agent != NULL))
@@ -109,19 +95,23 @@ if( array_key_exists( 'ss', $_POST ) ) {
 }
 
 /* Last modified files */
-echo "<br /><h2>Latest modified files (for all agents): </h2>\n\n";
 if(($syscheck_list == NULL) || ($syscheck_list{'global_list'} == NULL))
 {
-    echo '<ul class="ulsmall bluez">
+    echo '<h5>
         No integrity checking information available.<br />
         Nothing reported as changed.
-        </ul>
+        </h5>
       ';
 }
 else
 {
 
-   echo '<table><tr><td valign="top">';
+   echo '<div class="row"><div class="col s12">';
+   echo '<h5 class="topt">Latest modified files (for all agents): </h5>';
+   
+   $sysfiles = '<div id="file%s" onclick="ossec.togglesection(\'#file%s\',\'#filed%s\');" class="blue-text text-darken-2"><i class="material-icons">add</i>%s</div>';
+   $sysfilesd = '<div id="filed%s" style="display:none;" class="detail"><b>File:</b> %s</br><b>Agent:</b> %s</br><b>Modification time:</b> %s</div>';
+   
    if(isset($syscheck_list{'global_list'}) && 
       isset($syscheck_list{'global_list'}{'files'}))
    {
@@ -150,43 +140,17 @@ else
            if($last_mod_date != date('Y M d', $syscheck[0]))
            {
                $last_mod_date = date('Y M d', $syscheck[0]);
-               echo "\n<br /><b>$last_mod_date</b><br />\n";
+               echo "<b>$last_mod_date</b>";
            }
            
-           echo '
-               <span id="togglesk'.$sk_count.'">
-               <a  href="#" class="bluez" title="Expand '.$syscheck[2].'" 
-               onclick="ShowSection(\'sk'.$sk_count.'\');return false;">+'.
-               $ffile_name.'</a><br /> 
-               </span>
-
-               <div id="contentsk'.$sk_count.'" style="display: none">
-
-               <a  href="#" title="Hide '.$syscheck[2].'" 
-               onclick="HideSection(\'sk'.
-               $sk_count.'\');return false;">-'.$ffile_name.'</a>
-               <br />
-               <div class="smaller">
-               &nbsp;&nbsp;<b>File:</b> '.$ffile_name.'<br />';
-               if($ffile_name2 != "")
-               {
-                   echo "&nbsp;&nbsp;&nbsp;&nbsp;".$ffile_name2.'<br />';
-               }
-               echo '
-               &nbsp;&nbsp;<b>Agent:</b> '.$syscheck[1].'<br />
-               &nbsp;&nbsp;<b>Modification time:</b> '.
-               date('Y M d H:i:s', $syscheck[0]).'<br />
-               </div>
-
-               </div>
-               ';
+           echo sprintf($sysfiles, $sk_count, $sk_count, $sk_count, $ffile_name);
+           echo sprintf($sysfilesd, $sk_count, $ffile_name, $syscheck[1], date('Y M d H:i:s', $syscheck[0]));
        }
    }
 }
 
 
-echo "</td></tr></table>
-      <br /> <br />\n";
+echo "</div></div>";
 
 
 ?>

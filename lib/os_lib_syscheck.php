@@ -90,28 +90,26 @@ function __os_getdb($file, $_name)
     fclose($fp);
     
     /* Printing latest files */
-    echo '
-         <br /><br />
-         <h2>Latest modified files:</h2><br />
+    echo '<div class="row"><div class="col s4">
+         <h5 class="topt">Latest modified files:</h5>
          ';
     if (isset($mod_list))
     {
         arsort($mod_list);
         foreach ($mod_list as $mod_date => $val)
         {
-            echo "<b>".date('Y M d', $mod_date)."</b>&nbsp; &nbsp;";
-            echo '<a class="bluez" href="#id_'.$val[0].'">'.$val[1].'</a>
-                  <br />
-                 ';   
+            echo "<div><b>".date('Y M d', $mod_date)."</b>&nbsp; &nbsp;";
+            echo '<a class="bluez" href="#id_'.$val[0].'">'.$val[1].'</a></div>';   
         }
     }
     
-    echo "\n<br /><h2>Integrity Checking database: $_name</h2>\n";
+    echo '</div><div class="col s8">';
+    echo '<h5 class="topt">Integrity Checking database: '. $_name .'</h5>';
     
 
     /* Printing db */
-    echo '<br /><br /><table width="100%">';
-    echo '
+    echo '<table class="responsive-table bordered">';
+    echo '<thead>
          <tr>
            <th>File name</th>
            <th>Checksum</th>
@@ -121,43 +119,39 @@ function __os_getdb($file, $_name)
         echo '<th>Size</th>';
     }
     echo '
-         </tr>
+         </tr></thead>
          ';
     
     /* Dumping for each entry */
     $db_count = 0;
     foreach($db_list as $list_name => $list_val)
     {
-        $sk_class = ">";
+        $sk_class = 'blue-text text-darken-2';
         $sk_point = "";
 
-        if(($db_count % 2) == 0)
-        {
-            $sk_class = 'class="odd">';
-        }
-
+        
         if(isset($list_val{'ct'}))
         {
-            $sk_point = '<a id="id_'.$list_val{'ct'}.'" />';
+            $sk_point = '<span id="id_'.$list_val{'ct'}.'">'. $list_name .'</span>';
+        } else {
+            $sk_point = '<span>'. $list_name .'</span>';
         }
         
-        echo '<tr '.$sk_class.'<td width="45%" valign="top">'.
-            $sk_point.
-            $list_name.'</td><td width="53%" valign="top">'.
+        echo '<tr><td class="'. $sk_class .'">'.
+            $sk_point.'</td><td>'.
             $list_val{'sum'}.'</td>';
         
         if($set_size == 1)
         {
             echo '    
-            <td width="2%" valign="top">'.$list_val{'size'}.'</td>';
+            <td>'.$list_val{'size'}.'</td>';
         }
-        echo '</tr>
-             ';
+        echo '</tr>';
             
         $db_count++;            
     }
     
-    echo '</table>';
+    echo '</table></div></div>';
     return($db_list);
 }
 

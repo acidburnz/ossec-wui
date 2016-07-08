@@ -39,7 +39,7 @@ For information regarding commercial support, please visit <a href="http://www.o
 
 <h3 class="my">License</h3>
 <font size="2"> 
-      Copyright &copy; 2006 - 2013 <a href="http://www.trendmicro.com">Trend Micro</a>.  All rights reserved.
+      Copyright &copy; 2006 - 2016 <a href="http://www.trendmicro.com">Trend Micro</a>.  All rights reserved.
 <br /><br />
       
 OSSEC WEB UI (ossec-wui) is a free software; you can redistribute it and/or modify it under the terms of the GNU General Public License (version 2) as published by the FSF - Free Software Foundation. 

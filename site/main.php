@@ -39,75 +39,57 @@ if(($agent_list = os_getagents($ossec_handle)) == NULL)
 
 /* Printing current date */
 /* echo '<div class="smaller2">'.date('F dS Y h:i:s A').'</div><br />'; */
-echo '<div class="smaller2">'.date('F dS, Y h:i:s A').'</div><br />';
-
+echo '<div class="row"><div class="right">Last Update: '.date('F dS, Y h:i:s A').'</div></div>';
 
 /* Getting syscheck information */
 $syscheck_list = os_getsyscheck($ossec_handle);
 
-echo '<table width="95%"><tr><td width="45%" valign="top">';
 
 
+echo '<div class="row">';
+echo '<div class="col s4 dashcol">';
 /* Available agents */
-echo "<h2>Available&nbsp;agents:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h2><br />\n\n";
+echo '<h5 class="topt">Available agents:</h5>';
 
 
 /* Agent count for java script */
 $agent_count = 0;
 
+$agenti = '<div id="agent%s" onclick="ossec.togglesection(\'#agent%s\',\'#agentd%s\');" class="%s"><i class="material-icons">add</i>&nbsp;%s( %s ) %s</div>';
+$agentd = '<div id="agentd%s" style="display:none;" class="detail"><b>Name:</b> %s</br><b>IP:</b> %s</br><b>Last Update:</b> %s</br><b>OS:</b> %s</div>';
+
 
 /* Looping all agents */
 foreach ($agent_list as $agent) 
 {
-    $atitle = "";
     $aclass = "";
     $amsg = "";
 
     /* If agent is connected */
     if($agent{'connected'})
     {
-        $atitle = "Agent active";
-        $aclass = 'class="bluez"';
+        $aclass = 'blue-text text-darken-2';
     }
     else
     {
-        $atitle = "Agent Inactive";
-        $aclass = 'class="red"';
+        $aclass = 'red-text text-darken-2';
         $amsg = " - Inactive";
     }
+    
+    echo sprintf($agenti, $agent_count, $agent_count, $agent_count, $aclass, $agent['name'], $agent['ip'], $amsg);
+    echo sprintf($agentd, $agent_count, $agent['name'], $agent['ip'], date('Y M d H:i:s', $agent['change_time']), $agent['os']);
 
-    echo '
-        <span id="toggleagt'.$agent_count.'">
-        <a  href="#" '.$aclass.' title="'.$atitle.'" 
-        onclick="ShowSection(\'agt'.$agent_count.'\');return false;">+'.
-        $agent{'name'}." (".$agent{'ip'}.')'.$amsg.'</a><br /> 
-        </span>
-
-        <div id="contentagt'.$agent_count.'" style="display: none">
-
-        <a  href="#" '.$aclass.' title="'.$atitle.'" 
-        onclick="HideSection(\'agt'.
-        $agent_count.'\');return false;">-'.$agent{'name'}.
-        " (".$agent{'ip'}.')'.$amsg.'</a>
-        <br />
-        <div class="smaller">
-        &nbsp;&nbsp;<b>Name:</b> '.$agent{'name'}.'<br />
-        &nbsp;&nbsp;<b>IP:</b> '.$agent{'ip'}.'<br />
-        &nbsp;&nbsp;<b>Last keep alive:</b> '.
-        date('Y M d H:i:s', $agent{'change_time'}).'<br />
-        &nbsp;&nbsp;<b>OS:</b> '.$agent{'os'}.'<br />
-        </div>
-        </div>
-        ';
-    echo "\n";
     $agent_count++;
 }
 
-echo '</td>';
+echo '</div><div class="col s4 dashcol">';
+echo '<h5 class="topt">Latest modified files:</h5>';
+
+$sysfiles = '<div id="file%s" onclick="ossec.togglesection(\'#file%s\',\'#filed%s\');" class="blue-text text-darken-2"><i class="material-icons">add</i>%s</div>';
+$sysfilesd = '<div id="filed%s" style="display:none;" class="detail"><b>File:</b> %s</br><b>Agent:</b> %s</br><b>Modification time:</b> %s</div>';
 
 
 /* Last modified files */
-echo "<td valign='top' width='55%'><h2>Latest modified files: </h2><br />\n\n";
 $syscheck_list = os_getsyscheck($ossec_handle);
 if(($syscheck_list == NULL) || ($syscheck_list{'global_list'} == NULL))
 {
@@ -145,42 +127,16 @@ else
            {
                $ffile_name = $syscheck[2];
            }
+                      
+           echo sprintf($sysfiles, $sk_count, $sk_count, $sk_count, $ffile_name);
+           echo sprintf($sysfilesd, $sk_count, $ffile_name, $syscheck[1], date('Y M d H:i:s', $syscheck[0]));
            
-           echo '
-               <span id="togglesk'.$sk_count.'">
-               <a  href="#" class="bluez" title="Expand '.$syscheck[2].'" 
-               onclick="ShowSection(\'sk'.$sk_count.'\');return false;">+'.
-               $ffile_name.'</a><br /> 
-               </span>
-
-               <div id="contentsk'.$sk_count.'" style="display: none">
-
-               <a  href="#" title="Hide '.$syscheck[2].'" 
-               onclick="HideSection(\'sk'.
-               $sk_count.'\');return false;">-'.$ffile_name.'</a>
-               <br />
-               <div class="smaller">
-               &nbsp;&nbsp;<b>File:</b> '.$ffile_name.'<br />';
-               if($ffile_name2 != "")
-               {
-                   echo "&nbsp;&nbsp;&nbsp;&nbsp;".$ffile_name2.'<br />';
-               }
-               echo '
-               &nbsp;&nbsp;<b>Agent:</b> '.$syscheck[1].'<br />
-               &nbsp;&nbsp;<b>Modification time:</b> '.
-               date('Y M d H:i:s', $syscheck[0]).'<br />
-               </div>
-
-               </div>
-               ';
        }
    }
 }
 
 
-echo '</td></tr></table>
-';
-echo "<br /> <br />\n";
+echo '</div><div class="col s4 dashcol">';
 
 
 /* Getting last alerts */
@@ -191,15 +147,17 @@ if($alert_list == NULL)
 }
 else
 {
-    echo "<h2>Latest events</h2><br />\n";
+    echo '<h5 class="topt">Latest events</h5>';
     $alert_count = $alert_list->size() -1;
     $alert_array = $alert_list->alerts();
-
+    
     while($alert_count >= 0)
     {
         echo $alert_array[$alert_count]->toHtml();
         $alert_count--;
     }
 }
+
+echo '</div></div>';
 
 ?>
