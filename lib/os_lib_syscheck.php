@@ -99,7 +99,7 @@ function __os_getdb($file, $_name)
         foreach ($mod_list as $mod_date => $val)
         {
             echo "<div><b>".date('Y M d', $mod_date)."</b>&nbsp; &nbsp;";
-            echo '<a class="bluez" href="#id_'.$val[0].'">'.$val[1].'</a></div>';   
+            echo '<a class="blue-text text-darken-2" href="#id_'.$val[0].'">'.$val[1].'</a></div>';   
         }
     }
     

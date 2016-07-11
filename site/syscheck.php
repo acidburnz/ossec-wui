@@ -109,7 +109,7 @@ else
    echo '<div class="row"><div class="col s12">';
    echo '<h5 class="topt">Latest modified files (for all agents): </h5>';
    
-   $sysfiles = '<div id="file%s" onclick="ossec.togglesection(\'#file%s\',\'#filed%s\');" class="blue-text text-darken-2"><i class="material-icons">add</i>%s</div>';
+   $sysfiles = '<div id="file%s" onclick="ossec.togglesection(\'#file%s\',\'#filed%s\');" class="expand"><div class="valign-wrapper"><i class="material-icons valign green-text text-darken-3">add_circle</i><span class="valign blue-text text-darken-2">%s</span></div></div>';
    $sysfilesd = '<div id="filed%s" style="display:none;" class="detail"><b>File:</b> %s</br><b>Agent:</b> %s</br><b>Modification time:</b> %s</div>';
    
    if(isset($syscheck_list{'global_list'}) && 

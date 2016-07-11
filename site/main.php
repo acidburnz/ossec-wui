@@ -55,7 +55,7 @@ echo '<h5 class="topt">Available agents:</h5>';
 /* Agent count for java script */
 $agent_count = 0;
 
-$agenti = '<div id="agent%s" onclick="ossec.togglesection(\'#agent%s\',\'#agentd%s\');" class="%s"><i class="material-icons">add</i>&nbsp;%s( %s ) %s</div>';
+$agenti = '<div id="agent%s" onclick="ossec.togglesection(\'#agent%s\',\'#agentd%s\');" class="expand"><div class="valign-wrapper"><i class="material-icons valign green-text text-darken-3">add_circle</i><span class="valign %s">&nbsp;%s( %s ) %s</span></div></div>';
 $agentd = '<div id="agentd%s" style="display:none;" class="detail"><b>Name:</b> %s</br><b>IP:</b> %s</br><b>Last Update:</b> %s</br><b>OS:</b> %s</div>';
 
 
@@ -85,7 +85,7 @@ foreach ($agent_list as $agent)
 echo '</div><div class="col s4 dashcol">';
 echo '<h5 class="topt">Latest modified files:</h5>';
 
-$sysfiles = '<div id="file%s" onclick="ossec.togglesection(\'#file%s\',\'#filed%s\');" class="blue-text text-darken-2"><i class="material-icons">add</i>%s</div>';
+$sysfiles = '<div id="file%s" onclick="ossec.togglesection(\'#file%s\',\'#filed%s\');" class="expand"><div class="valign-wrapper"><i class="material-icons valign green-text text-darken-3">add_circle</i><span class="valign blue-text text-darken-2">%s</span></div></div>';
 $sysfilesd = '<div id="filed%s" style="display:none;" class="detail"><b>File:</b> %s</br><b>Agent:</b> %s</br><b>Modification time:</b> %s</div>';
 
 
@@ -136,7 +136,7 @@ else
 }
 
 
-echo '</div><div class="col s4 dashcol">';
+echo '</div><div class="col s4">';
 
 
 /* Getting last alerts */

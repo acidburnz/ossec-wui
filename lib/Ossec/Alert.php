@@ -45,33 +45,43 @@ class Ossec_Alert {
 
     function toHtml( ) {
 
-        $date    = date('Y M d H:i:s', $this->time);
-        $id_link = "<a href=\"http://www.ossec.net/doc/search.html?q=rule-id-{$this->id}\">{$this->id}</a>";
-        $message = join( '<br/>', $this->msg );
+        $date    = date('Y/m/d H:i:s', $this->time);
+        $id_link = '<a class="blue-text text-lighten-2" href="http://www.ossec.net/doc/search.html?q=rule-id-'.$this->id.'">'.$this->id.'</a>';
+        $message = join( '</br>', $this->msg );
 
         $srcip = "";
         if( $this->srcip != '(none)' && $this->srcip != "") {
-            $srcip = "<div class=\"alertindent\">Src IP: </div>{$this->srcip}<br/>";
+            $srcip = '<div><b>Src IP: </b>'.$this->srcip.'</div>';
         }
 
         $user = "";
         if( $this->user != '') {
-            $user = "<div class=\"alertindent\">User: </div>{$this->user}<br/>";
+            $user = "<div><b>User: </b>'.$this->user.'</div>";
         }
 
-        $class = "level_{$this->level} id_{$this->id} srcip_{$this->srcip}";
+        if ( $this->level >= 7) {
+            $icon = "warning";
+            $icolor = 'orange-text';
+        } else {
+            $icon = "done";
+            $icolor = "green-text";
+        }
 
-        return <<<HTML
-        <div class="alert $class">
-            <span class="alertdate">$date</span>
-            <div class="alertindent">Level: </div><div class="alertlevel">{$this->level} - <span class="alertdescription">{$this->description}</span></div>
-            <div class="alertindent">Rule Id: </div>$id_link <br />
-            <div class="alertindent">Location: </div>{$this->location}<br />
-            $srcip
-            $user
-            <div class="msg">$message</div>
-        </div>
-HTML;
+        $alert = '<div class="card">'
+                  .'<div class="card-content blue-grey darken-2 white-text">'
+                  .'<span class="card-title activator"><div class="valign-wrapper activator"><i class="material-icons left valign '.$icolor.'">'.$icon.'</i><span class="valign activator">'.$date.' - '.$this->location.'</span></div></span>'
+                  .'<div><b>Level: </b>'.$this->level.'</div>'
+                  .'<div><b>Rule: </b>'.$id_link.'</div>'
+                  .'<div><b>Description: </b>'.$this->description.'</div>'
+                  .'</div>'
+                  .'<div class="card-reveal blue-grey darken-2 white-text">'
+                  .'<span class="card-title"><i class="material-icons left '.$icolor.'">'.$icon.'</i>'.$date.' - '.$this->location.'<i class="material-icons right">close</i></span>'  
+                  .$srcip
+                  .$user
+                  .'<div>'.$message.'</div>'
+                  .'</div></div>';
+
+        return $alert;
     }
 };
 

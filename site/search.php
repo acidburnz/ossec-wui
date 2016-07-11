@@ -277,63 +277,40 @@ echo '<div class="smaller2">'.date('F dS Y h:i:s A').'<br />';
 if($USER_monitoring == 1)
 {
     echo ' -- Refreshing every '.$ossec_refresh_time.' secs</div><br />';
+    $monf = '';
+    $monr = 'checked="checked"';
 }
 else
 {
     echo '</div><br />';
+    $monf = 'checked="checked"';
+    $monr = '';
 }
 
 
 /* Getting all agents. */
 $agent_list = os_getagents($ossec_handle);
 
-
-//echo '<a href="?f=sf">Firewall Search</a> - <a href="?f=s">Alerts Search</a>';
-//echo "<h2>Alert search options:</h2>\n";
 echo '<form name="dosearch" method="post" action="index.php?f=s">';
 echo '<div class="row"><div class="col s12">';
 echo '<div class="row"><div class="col s2"><p>
-        <input name="monitoring" type="radio" value="0" id="monf" checked="checked"/>
+        <input name="monitoring" type="radio" value="0" id="monf" '.$monf.'/>
         <label for="monf">Date</label>
       </p></div>'
-      .'<div class="col s3"><input type="date" name="initdate" id="i_date_a" value="'.date('Y-m-d H:i', $u_init_time).'"/><label for="i_date_a">From</label></div>'
-      .'<div class="col s3"><input type="date" name="finaldate" id="f_date_a" value="'.date('Y-m-d H:i', $u_final_time).'"/><label for="d">To</label></div>'
+      .'<div class="col s3"><label for="i_date_a">From</label><input type="date" name="initdate" id="i_date_a" value="'.date('Y-m-d H:i', $u_init_time).'"/></div>'
+      .'<div class="col s3"><label for="f_date_a">To</label><input type="date" name="finaldate" id="f_date_a" value="'.date('Y-m-d H:i', $u_final_time).'"/></div>'
       .'</div>';
 
 echo '<div class="row"><div class="col s2"><p>
-        <input name="monitoring" type="radio" value="1" id="monr"/>
+        <input name="monitoring" type="radio" value="1" id="monr" '.$monr.'/>
         <label for="monr">Real time monitoring</label>
       </p></div>';
 
-echo '</div></div></form>';
+echo '</div></div></div>';
 
+/* Level */
+echo '<div class="row"><div class="col s3"><div class="input-field col s4 blue-text text-darken-2"><select name="level">';
 
-/* Search forms */
-/*echo '
-<form name="dosearch" method="post" action="index.php?f=s">
-<table><tr valign="top">
-    <td><input type="radio" name="monitoring" value="0" checked="checked"/>
-    </td>
-    <td>From: &nbsp;<input type="date" name="initdate"
-    id="i_date_a" size="17"
-    value="'.date('Y-m-d H:i', $u_init_time).'" maxlength="16"
-    class="formText" />
-    </td><td>&nbsp;&nbsp;
-    To: &nbsp;<input type="date" name="finaldate" id="f_date_a" size="17"
-    value="'.date('Y-m-d H:i', $u_final_time).'" maxlength="16"
-    class="formText" />
-    </td>
-    </tr>
-';
-
-echo '<tr><td><input type="radio" name="monitoring" value="1" '.$rt_sk.'/></td>
-      <td>Real time monitoring</td></tr>
-      </table>
-      <br />
-      <table>
-     ';*/
-
-echo '<tr><td>Minimum level:</td><td><select name="level" class="formText">';
 if($u_level == 1)
 {
     echo '   <option value="1" selected="selected">All</option>';
@@ -354,13 +331,11 @@ for($l_counter = 15; $l_counter >= 2; $l_counter--)
         echo '   <option value="'.$l_counter.'">'.$l_counter.'</option>';
     }
 }
-echo '  </select>';
-
+echo '</select><label>Minimum level</label></div></div>';
 
 /* Category */
-echo '</td><td>
-     Category: </td><td><select name="grouppattern" class="formText">';
-echo '<option value="ALL" class="bluez">All categories</option>';
+echo '<div class="col s3"><div class="input-field col s5 blue-text text-darken-2"><select name="grouppattern">';
+echo '<option value="ALL">All categories</option>';
 
 foreach($global_categories as $_cat_name => $_cat)
 {
@@ -383,17 +358,14 @@ foreach($global_categories as $_cat_name => $_cat)
         }
     }
 }
-echo '</select>';
+echo '</select><label>Category</label></div></div></div>';
 
 /* Str pattern */
-echo '</td></tr><tr><td>
-    Pattern: </td><td><input type="text" name="strpattern" size="16"
-                    value="'.$u_pattern.'" class="formText" /></td>';
-
+echo '<div class="row"><div class="col s3"><label for="strpattern">Pattern</label>'
+    .'<input id="strpattern" type="text" name="strpattern" value="'.$u_pattern.'"></div>';
 
 /* Log formats */
-echo '<td>
-     Log formats: </td><td><select name="logpattern" class="formText">';
+echo '<div class="col s3"><div class="input-field col s5 blue-text text-darken-2"><select name="logpattern">';
 echo '<option value="ALL" class="bluez">All log formats</option>';
 
 foreach($log_categories as $_cat_name => $_cat)
@@ -417,80 +389,46 @@ foreach($log_categories as $_cat_name => $_cat)
         }
     }
 }
-echo '</select>';
+echo '</select><label>Log formats</label></div></div></div>';
 
 
 /* Srcip pattern */
-echo '</td></tr><tr><td>
-    Srcip: </td><td>
-    <input type="text" name="srcippattern" size="16" class="formText"
-                    value="'.$u_srcip.'"/>&nbsp;&nbsp;';
+echo '<div class="row"><div class="col s3"><label for="srcippattern">Src IP</label>'
+    .'<input id="srcippattern" type="text" name="srcippattern" value="'.$u_srcip.'"></div>';
 
 /* Rule pattern */
-echo '</td><td>
-    User: </td><td><input type="text" name="userpattern" size="8"
-                    value="'.$u_user.'" class="formText" /></td></tr>';
+echo '<div class="col s3"><label for="userpattern">User</label>'
+    .'<input id="userpattern" type="text" name="userpattern" value="'.$u_user.'"></div></div>';
+
 
 /* Location */
-echo '<tr><td>
-    Location:</td><td>
-    <input type="text" name="locationpattern" size="16" class="formText"
-                    value="'.$u_location.'"/>&nbsp;&nbsp;';
+echo '<div class="row"><div class="col s3"><label for="locationpattern">Location</label>'
+    .'<input id="locationpattern" type="text" name="locationpattern" value="'.$u_rule.'"></div>';
+
 
 /* Rule pattern */
-echo '</td><td>
-    Rule id: </td><td><input type="text" name="rulepattern" size="8"
-                    value="'.$u_rule.'" class="formText"/>';
+echo '<div class="col s3"><label for="rulepattern">Rule ID</label>'
+    .'<input id="rulepattern" type="text" name="rulepattern" value="'.$u_rule.'"></div></div>';
+
 
 /* Max Alerts  */
-echo '</td></tr><tr><td>
-    Max Alerts:</td>
-    <td><input type="text" name="max_alerts_per_page" size="8"
-    value="'.$ossec_max_alerts_per_page.'" class="formText" /></td></tr>';
+echo '<div class="row"><div class="col s3"><label for="max_alerts_per_page">Max Alerts</label>'
+    .'<input id="max_alerts_per_page" type="text" name="max_alerts_per_page" value="'.$ossec_max_alerts_per_page.'"></div></div>';
 
 
 /* Agent */
 //foreach ($agent_list as $agent)
 
 /* Final form */
-echo '
-    <tr><td>
-    <input type="submit" name="search" value="Search" class="button" />
-';
+echo '<div class="row"><div class="col s3"><input type="submit" name="search" value="Search" class="btn"></div></div>';
+echo '<input type="hidden" name="searchid" value="'.$USER_searchid.'" /></form>';
 
-
-echo '</td></tr></table>
-     <input type="hidden" name="searchid" value="'.$USER_searchid.'" />
-     </form><br /> <br />
-     ';
-
-
-/* Java script for date */
-/*echo '
-<script type="text/javascript">
-Calendar.setup({
-button          :   "i_trigger",
-inputField     :    "i_date_a",
-ifFormat       :    "%Y-%m-%d %H:%M",
-showsTime      :    true,
-timeFormat     :    "24"
-});
-Calendar.setup({
-button          :   "f_trigger",
-inputField     :    "f_date_a",
-ifFormat       :    "%Y-%m-%d %H:%M",
-showsTime      :    true,
-timeFormat     :    "24"
-});
-</script>
-
-';*/
-
-echo "<h2>Results:</h2>\n";
+/* show result */
+echo '<h5 class="topt">Results:</h5>';
 
 if(!isset($USER_init) || !isset($USER_final) || !isset($USER_level))
 {
-    echo "<b>No search performed.</b><br />\n";
+    echo "<b>No search performed.</b>\n";
     return(1);
 }
 
@@ -521,11 +459,11 @@ if($output_list == NULL || $output_list[1] == NULL)
 {
     if($used_stored == 1)
     {
-        echo "<b class='red'>Nothing returned (search expired). </b><br />\n";
+        echo "<b class='red'>Nothing returned (search expired). </b>";
     }
     else
     {
-        echo "<b class='red'>Nothing returned. </b><br />\n";
+        echo "<b class='red'>Nothing returned. </b><br />";
     }
     return(1);
 }
@@ -549,7 +487,7 @@ if($USER_page >= $output_list[0]{'pg'})
 $real_page = ($output_list[0]{'pg'} + 1) - $USER_page;
 
 
-echo "<b>Total alerts found: </b>".$output_list[0]{'count'}."<br />";
+echo '<div><b>Total alerts found: </b>'.$output_list[0]{'count'}.'</div>';
 
 if($output_list[0]{'pg'} > 1)
 {
