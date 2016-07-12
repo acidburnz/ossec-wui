@@ -1,12 +1,12 @@
 OSSEC Web UI v0.9-1
-Copyright (c) 2006-2013 Trend Micro Inc.
+Copyright (c) 2006-2016 Trend Micro Inc.
 
 
 1- How to install.
 
 1.0 - Prerequisites
 
-    - Apache with PHP (>= 4.1 or >= 5.0) installed.
+    - Apache with PHP (>= 5.0) installed.
     - OSSEC (version >= 0.9-3) already installed.
 
 
