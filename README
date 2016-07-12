@@ -1,4 +1,4 @@
-OSSEC Web UI v0.9
+OSSEC Web UI v0.9-1
 Copyright (c) 2006-2013 Trend Micro Inc.
 
 
@@ -12,7 +12,7 @@ Copyright (c) 2006-2013 Trend Micro Inc.
 
 1.1- Clone the web ui script:
 
-    # git clone https://github.com/ossec/ossec-wui.git
+    # git clone https://github.com/acidburnz/ossec-wui.git
 
 
 1.2- Move the folder to somewhere acessible by
