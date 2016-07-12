@@ -14,6 +14,10 @@ html, body {
     display: inline-block;
 }
 
+.expand {
+    cursor: pointer;
+}
+
 h5.topt {
     padding-bottom: 2px;
     border-bottom: 1px solid black;
@@ -26,10 +30,6 @@ h5.logo {
     padding: 0;
     text-shadow: -1px -1px 0px rgba(69,90,100,0.3), 1px 1px 0px rgba(0,0,0,0.8);
     opacity: 0.4;
-}
-
-div.expand {
-    cursor: pointer;
 }
 
 div.detail {

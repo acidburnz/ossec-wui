@@ -99,33 +99,18 @@ class Ossec_AlertList {
 
     function toHTML( ) {
 
-        ob_start();
+        ob_start(); ?>
 
-        $first = $this->earliest();
-        $first = date('Y M d H:i:s', $first->time );
-        $last  = $this->latest();
-        $last  = date('Y M d H:i:s', $last->time ); ?>
+        <div class="row"><div class="col s12 m4"><div id="alert_list_nav">
+            <?php echo $this->_tallyNav( $this->_level_histogram, 'level', 'severity' , 'Severity breakdown' ) ?>
+            <?php echo $this->_tallyNav( $this->_id_histogram   , 'id'   , 'rule'     , 'Rules breakdown'    ) ?>
+            <?php echo $this->_tallyNav( $this->_srcip_histogram, 'srcip', 'Source IP', 'Src IP breakdown'   ) ?>
+        </div></div>
 
-        <div id="alert_list_nav">
-            <?php echo $this->_tallyNav( $this->_level_histogram, 'level', 'severity' , '+Severity breakdown' ) ?>
-            <?php echo $this->_tallyNav( $this->_id_histogram   , 'id'   , 'rule'     , '+Rules breakdown'    ) ?>
-            <?php echo $this->_tallyNav( $this->_srcip_histogram, 'srcip', 'Source IP', '+Src IP breakdown'   ) ?>
-        </div>
-        <br />
-
-        <table width="100%">
-            <tr><td><b>First event</b> at <a href="#lt"><?php echo $first ?></a></td></tr>
-            <tr><td><b>Last event</b> at <a href="#ft"><?php echo $last ?></a></td></tr>
-        </table>
-        <br />
-
-        <h5 class="topt">Alert list</h5>
-        <div id="alert_list_content">
-            <a name="ft" ></a>
-            <?php foreach( array_reverse($this->_alerts) as $alert ): ?>
-                <?php echo $alert->toHtml( ) ?>
-            <?php endforeach; ?>
-            <a name="lt" ></a>
+        <div id="listcard" class="col s12 m8">
+	    <?php foreach( array_reverse($this->_alerts) as $alert ): ?>
+	        <?php echo $alert->toHtml( ) ?>
+	    <?php endforeach; ?>
         </div>
         <?php
         
@@ -133,7 +118,7 @@ class Ossec_AlertList {
 
     }
 
-    function _tallyNav($histogram, $key, $description, $title ) {
+/*    function _tallyNav($histogram, $key, $description, $title ) {
 
         // Obtain copy of histogram and sort in reverse order by value.
 
@@ -160,6 +145,30 @@ class Ossec_AlertList {
             </div>
         </div><?php
 
+    } */
+
+    function _tallyNav($histogram, $key, $description, $title ) {
+       // Obtain copy of histogram and sort in reverse order by value.
+
+       $tally = $histogram->getRaw( );
+       arsort( $tally ); 
+       $uid = uniqid();
+       
+       $cat = '<div id="cat%s" onclick="ossec.togglesection(\'#cat%s\',\'#catd%s\');" class="expand"><div class="valign-wrapper"><i class="material-icons valign green-text text-darken-3">add_circle</i><span class="valign blue-text text-darken-2">%s</span></div></div>';
+       $catd = '<div id="catd%s" style="display:none;" class="detail">';
+       $ele = '<div>%s alert(s) from <b>%s %s</b></div>';
+             
+       echo '<div class="alert_list_nav">';
+       echo sprintf($cat, $uid, $uid, $uid, $title);
+       echo sprintf($catd, $uid);
+
+       foreach($tally as $id => $count) {
+           echo sprintf($ele, $count, $key, $id, $key, $id);
+       }       
+
+       echo '</div></div>';
+
+       
     }
 
 };

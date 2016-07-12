@@ -104,7 +104,7 @@ else
 /* Day option */
 echo '<div class="row">';
 echo '<form name="dosearch" method="post" action="index.php?f=t">'
-    . '<div class="input-field col s3 blue-text text-darken-2">'
+    . '<div class="input-field col s12 m3 blue-text text-darken-2">'
     . '<select name="day">';
 
 $option = '<option value="%s" %s>%s</option>';
@@ -124,7 +124,7 @@ echo '</select><label>Day</label></div>';
 
 
 /* Monthly */
-echo '<div class="input-field col s3 blue-text text-darken-2">'
+echo '<div class="input-field col s12 m3 blue-text text-darken-2">'
     . '<select name="month">';
 $months = array("January" => "Jan", 
                 "February" => "Feb", 
@@ -156,7 +156,7 @@ echo '</select><label>Month</label></div>';
 
 
 /* Year */
-echo '<div class="input-field col s3 blue-text text-darken-2">'
+echo '<div class="input-field col s12 m3 blue-text text-darken-2">'
     . '<select name="year">';
 
 echo '<option value="'.$curr_year.'" selected="selected">'.$curr_year.'</option>
@@ -164,10 +164,10 @@ echo '<option value="'.$curr_year.'" selected="selected">'.$curr_year.'</option>
     <option value="'.($curr_year-2).'">'.($curr_year-2).'</option>
     ';
 echo '</select><label>Year</label></div>'
-. '<div class="col s3"><input type="submit" name="Stats" value="Change options" class="btn" /></div></form></div>';
+. '<div class="col s12 m3"><input type="submit" name="Stats" value="Change options" class="btn" /></div></form></div>';
 
 
-echo '<div class="row"><div class="col s3">';
+echo '<div class="row"><div class="col s12 m3">';
 /* Getting daily stats */
 $l_year_month = date('Y/M', $init_time);
 
@@ -208,7 +208,7 @@ if($USER_day != 0)
 }
 
 echo '</div>';
-echo '<div class="col s3">';
+echo '<div class="col s12 m3">';
 
 echo '<h5 class="topt">Aggregate values by severity</h5>';
 echo '<table class="responsive-table bordered">
@@ -271,7 +271,7 @@ echo '
 </table>';
 
 echo '</div>';
-echo '<div class="col s3">';
+echo '<div class="col s12 m3">';
 
 echo '<h5 class="topt">Aggregate values by rule</h5>';
 echo '<table class="responsive-table bordered">
@@ -480,6 +480,5 @@ else
 echo '</table></div>';
 
 echo '</div></div>';
-echo '<div class="row"><div class="col s12">';
 
 ?>

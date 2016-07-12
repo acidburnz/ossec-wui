@@ -18,6 +18,7 @@ require(["jquery", "materialize", "mustache", "ossec"], function($, Materialise,
         console.log("Ready Fire !!");
         
         ossec.setscroll();
+        $(".button-collapse").sideNav();
         
         if (window.location.search === "?f=i") {
             ossec.initsyscheck();

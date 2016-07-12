@@ -273,16 +273,17 @@ if( array_key_exists( 'search', $_POST ) ) {
 }
 
 /* Printing current date */
-echo '<div class="smaller2">'.date('F dS Y h:i:s A').'<br />';
+//echo '<div class="smaller2">'.date('F dS Y h:i:s A').'<br />';
+echo '<div class="row"><div class="right">Last Update: '.date('F dS, Y h:i:s A').'</div></div>';
 if($USER_monitoring == 1)
 {
-    echo ' -- Refreshing every '.$ossec_refresh_time.' secs</div><br />';
+    //echo ' -- Refreshing every '.$ossec_refresh_time.' secs</div><br />';
+    echo '<div class="row"><div class="right" -- Refreshing every '.$ossec_refresh_time.' secs</div></div>';
     $monf = '';
     $monr = 'checked="checked"';
 }
 else
 {
-    echo '</div><br />';
     $monf = 'checked="checked"';
     $monr = '';
 }
@@ -292,16 +293,16 @@ else
 $agent_list = os_getagents($ossec_handle);
 
 echo '<form name="dosearch" method="post" action="index.php?f=s">';
-echo '<div class="row"><div class="col s12">';
-echo '<div class="row"><div class="col s2"><p>
+echo '<div class="row"><div class="col s12 m12">';
+echo '<div class="row"><div class="col s12 m2"><p>
         <input name="monitoring" type="radio" value="0" id="monf" '.$monf.'/>
         <label for="monf">Date</label>
       </p></div>'
-      .'<div class="col s3"><label for="i_date_a">From</label><input type="date" name="initdate" id="i_date_a" value="'.date('Y-m-d H:i', $u_init_time).'"/></div>'
-      .'<div class="col s3"><label for="f_date_a">To</label><input type="date" name="finaldate" id="f_date_a" value="'.date('Y-m-d H:i', $u_final_time).'"/></div>'
+      .'<div class="col s12 m3"><label for="i_date_a">From</label><input type="date" name="initdate" id="i_date_a" value="'.date('Y-m-d H:i', $u_init_time).'"/></div>'
+      .'<div class="col s12 m3"><label for="f_date_a">To</label><input type="date" name="finaldate" id="f_date_a" value="'.date('Y-m-d H:i', $u_final_time).'"/></div>'
       .'</div>';
 
-echo '<div class="row"><div class="col s2"><p>
+echo '<div class="row"><div class="col s12 m2"><p>
         <input name="monitoring" type="radio" value="1" id="monr" '.$monr.'/>
         <label for="monr">Real time monitoring</label>
       </p></div>';
@@ -309,7 +310,7 @@ echo '<div class="row"><div class="col s2"><p>
 echo '</div></div></div>';
 
 /* Level */
-echo '<div class="row"><div class="col s3"><div class="input-field col s4 blue-text text-darken-2"><select name="level">';
+echo '<div class="row"><div class="col s12 m3"><div class="input-field col s4 blue-text text-darken-2"><select name="level">';
 
 if($u_level == 1)
 {
@@ -334,7 +335,7 @@ for($l_counter = 15; $l_counter >= 2; $l_counter--)
 echo '</select><label>Minimum level</label></div></div>';
 
 /* Category */
-echo '<div class="col s3"><div class="input-field col s5 blue-text text-darken-2"><select name="grouppattern">';
+echo '<div class="col s12 m3"><div class="input-field col s12 m5 blue-text text-darken-2"><select name="grouppattern">';
 echo '<option value="ALL">All categories</option>';
 
 foreach($global_categories as $_cat_name => $_cat)
@@ -361,11 +362,11 @@ foreach($global_categories as $_cat_name => $_cat)
 echo '</select><label>Category</label></div></div></div>';
 
 /* Str pattern */
-echo '<div class="row"><div class="col s3"><label for="strpattern">Pattern</label>'
+echo '<div class="row"><div class="col s12 m3"><label for="strpattern">Pattern</label>'
     .'<input id="strpattern" type="text" name="strpattern" value="'.$u_pattern.'"></div>';
 
 /* Log formats */
-echo '<div class="col s3"><div class="input-field col s5 blue-text text-darken-2"><select name="logpattern">';
+echo '<div class="col s12 m3"><div class="input-field col s12 m5 blue-text text-darken-2"><select name="logpattern">';
 echo '<option value="ALL" class="bluez">All log formats</option>';
 
 foreach($log_categories as $_cat_name => $_cat)
@@ -393,26 +394,26 @@ echo '</select><label>Log formats</label></div></div></div>';
 
 
 /* Srcip pattern */
-echo '<div class="row"><div class="col s3"><label for="srcippattern">Src IP</label>'
+echo '<div class="row"><div class="col s12 m3"><label for="srcippattern">Src IP</label>'
     .'<input id="srcippattern" type="text" name="srcippattern" value="'.$u_srcip.'"></div>';
 
 /* Rule pattern */
-echo '<div class="col s3"><label for="userpattern">User</label>'
+echo '<div class="col s12 m3"><label for="userpattern">User</label>'
     .'<input id="userpattern" type="text" name="userpattern" value="'.$u_user.'"></div></div>';
 
 
 /* Location */
-echo '<div class="row"><div class="col s3"><label for="locationpattern">Location</label>'
+echo '<div class="row"><div class="col s12 m3"><label for="locationpattern">Location</label>'
     .'<input id="locationpattern" type="text" name="locationpattern" value="'.$u_rule.'"></div>';
 
 
 /* Rule pattern */
-echo '<div class="col s3"><label for="rulepattern">Rule ID</label>'
+echo '<div class="col s12 m3"><label for="rulepattern">Rule ID</label>'
     .'<input id="rulepattern" type="text" name="rulepattern" value="'.$u_rule.'"></div></div>';
 
 
 /* Max Alerts  */
-echo '<div class="row"><div class="col s3"><label for="max_alerts_per_page">Max Alerts</label>'
+echo '<div class="row"><div class="col s12 m3"><label for="max_alerts_per_page">Max Alerts</label>'
     .'<input id="max_alerts_per_page" type="text" name="max_alerts_per_page" value="'.$ossec_max_alerts_per_page.'"></div></div>';
 
 
@@ -420,15 +421,15 @@ echo '<div class="row"><div class="col s3"><label for="max_alerts_per_page">Max 
 //foreach ($agent_list as $agent)
 
 /* Final form */
-echo '<div class="row"><div class="col s3"><input type="submit" name="search" value="Search" class="btn"></div></div>';
+echo '<div class="row"><div class="col s12 m3"><input type="submit" name="search" value="Search" class="btn"></div></div>';
 echo '<input type="hidden" name="searchid" value="'.$USER_searchid.'" /></form>';
 
 /* show result */
-echo '<h5 class="topt">Results:</h5>';
+echo '<div class="row"><div class="col s12"><h5 class="topt">Results:</h5>';
 
 if(!isset($USER_init) || !isset($USER_final) || !isset($USER_level))
 {
-    echo "<b>No search performed.</b>\n";
+    echo '<b>No search performed.</b></div></div>';
     return(1);
 }
 
@@ -541,6 +542,7 @@ echo '
 ';
 }
 
+echo '</div></div>';
 
 /* Checking if page exists */
 if(!isset($output_list[0]{$real_page}) ||
@@ -550,9 +552,6 @@ if(!isset($output_list[0]{$real_page}) ||
     echo "<b class='red'>Nothing returned (or search expired). </b><br />\n";
     return(1);
 }
-
-echo "<br /><br />";
-
 
 /* Printing page */
 // TODO: There are functions for slurping file contents.

@@ -61,7 +61,7 @@ $syscheck_list = os_getsyscheck($ossec_handle);
 /* Creating form */
 echo '<div class="row">';
 echo '<form name="dosearch" method="post" action="index.php?f=i">'
-    . '<div class="input-field col s3 blue-text text-darken-2">'
+    . '<div class="input-field col s12 m3 blue-text text-darken-2">'
     . '<select name="agentpattern">';
 
 $option = '<option value="%s" %s>%s</option>';
@@ -82,7 +82,7 @@ foreach($syscheck_list as $agent => $agent_name)
 
 echo '</select><label>Agent Name</label></div>';
 
-echo '<div class="col s4"><input type="submit" name="ss" value="Dump database" class="btn"/>';
+echo '<div class="col s12 m4"><input type="submit" name="ss" value="Dump database" class="btn"/>';
 echo '</div></form></div>';
 
 /* Dumping database */

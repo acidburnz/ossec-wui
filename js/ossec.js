@@ -12,13 +12,13 @@ define(["ossec"], function() {
         },
 
         initsearch: function() {
-            $('#i_date_a').pickadate({format: "yyyy-mm-dd"});
-            $('#f_date_a').pickadate({format: "yyyy-mm-dd"});
+            var options = {
+                format: "yyyy-mm-dd",
+                onSet: ossec.addtime
+            };
+            $('#i_date_a').pickadate(options);
+            $('#f_date_a').pickadate(options);
             $('select').material_select();
-
-            if ($("#alert_list_nav").length !== 0) {
-                 ossec.initadvsearch();
-            }
         },
 
         initsyscheck: function() {
@@ -51,9 +51,9 @@ define(["ossec"], function() {
             ossec.setscroll();
         },
 
-        initadvsearch: function() {
-           console.log("adv init");
-           
+        addtime: function(context) {
+            curs = $(this.$node).val();
+            $(this.$node).val(curs + " 00:00");
         }
     };
     

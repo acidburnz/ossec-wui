@@ -75,7 +75,7 @@ class Ossec_Alert {
                   .'<div><b>Description: </b>'.$this->description.'</div>'
                   .'</div>'
                   .'<div class="card-reveal blue-grey darken-2 white-text">'
-                  .'<span class="card-title"><i class="material-icons left '.$icolor.'">'.$icon.'</i>'.$date.' - '.$this->location.'<i class="material-icons right">close</i></span>'  
+                  .'<span class="card-title"><i class="material-icons left '.$icolor.'">'.$icon.'</i><span>'.$date.' - '.$this->location.'</span><i class="material-icons right">close</i></span>'  
                   .$srcip
                   .$user
                   .'<div>'.$message.'</div>'

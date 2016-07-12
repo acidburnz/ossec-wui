@@ -47,7 +47,7 @@ $syscheck_list = os_getsyscheck($ossec_handle);
 
 
 echo '<div class="row">';
-echo '<div class="col s4 dashcol">';
+echo '<div class="col s12 m3">';
 /* Available agents */
 echo '<h5 class="topt">Available agents:</h5>';
 
@@ -82,7 +82,7 @@ foreach ($agent_list as $agent)
     $agent_count++;
 }
 
-echo '</div><div class="col s4 dashcol">';
+echo '</div><div class="col s12 m4">';
 echo '<h5 class="topt">Latest modified files:</h5>';
 
 $sysfiles = '<div id="file%s" onclick="ossec.togglesection(\'#file%s\',\'#filed%s\');" class="expand"><div class="valign-wrapper"><i class="material-icons valign green-text text-darken-3">add_circle</i><span class="valign blue-text text-darken-2">%s</span></div></div>';
@@ -136,7 +136,7 @@ else
 }
 
 
-echo '</div><div class="col s4">';
+echo '</div><div class="col s12 m5">';
 
 
 /* Getting last alerts */
