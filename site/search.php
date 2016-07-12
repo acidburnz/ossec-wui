@@ -60,13 +60,8 @@ if(isset($_POST['searchid']))
     }
 }
 
-
-$rt_sk = "";
-$sv_sk = 'checked="checked"';
 if(isset($_POST['monitoring']) && ($_POST['monitoring'] == 1))
 {
-    $rt_sk = 'checked="checked"';
-    $sv_sk = "";
 
     /* Cleaning up time */
     $USER_final = $u_final_time;
@@ -268,18 +263,18 @@ if( array_key_exists( 'search', $_POST ) ) {
 	}
 	else
 	{
-	    echo "<b class='red'>Invalid search. </b><br />\n";
+	    echo '<b class="red">Invalid search.</b>';
 	    return;
 	}
 }
 
 /* Printing current date */
 //echo '<div class="smaller2">'.date('F dS Y h:i:s A').'<br />';
-echo '<div class="row"><div class="right">Last Update: '.date('F dS, Y h:i:s A').'</div></div>';
+echo '<div class="right">Last Update: '.date('F dS, Y h:i:s A').'</div>';
 if($USER_monitoring == 1)
 {
     //echo ' -- Refreshing every '.$ossec_refresh_time.' secs</div><br />';
-    echo '<div class="row"><div class="right" -- Refreshing every '.$ossec_refresh_time.' secs</div></div>';
+    echo '<div class="left"> -- Refreshing every '.$ossec_refresh_time.' secs</div>';
     $monf = '';
     $monr = 'checked="checked"';
 }
@@ -338,7 +333,7 @@ for($l_counter = 15; $l_counter >= 2; $l_counter--)
 echo '</select><label>Minimum level</label></div></div>';
 
 /* Category */
-echo '<div class="col s12 m3"><div class="input-field col s12 m5 blue-text text-darken-2"><select name="grouppattern">';
+echo '<div class="col s12 m3"><div class="input-field col s12 m7 blue-text text-darken-2"><select name="grouppattern">';
 echo '<option value="ALL">All categories</option>';
 
 foreach($global_categories as $_cat_name => $_cat)
@@ -362,14 +357,10 @@ foreach($global_categories as $_cat_name => $_cat)
         }
     }
 }
-echo '</select><label>Category</label></div></div></div>';
-
-/* Str pattern */
-echo '<div class="row"><div class="col s12 m3"><label for="strpattern">Pattern</label>'
-    .'<input class="blue-text text-darken-2" id="strpattern" type="text" name="strpattern" value="'.$u_pattern.'"></div>';
+echo '</select><label>Category</label></div></div>';
 
 /* Log formats */
-echo '<div class="col s12 m3"><div class="input-field col s12 m5 blue-text text-darken-2"><select name="logpattern">';
+echo '<div class="col s12 m3"><div class="input-field col s12 m7 blue-text text-darken-2"><select name="logpattern">';
 echo '<option value="ALL" class="bluez">All log formats</option>';
 
 foreach($log_categories as $_cat_name => $_cat)
@@ -395,9 +386,12 @@ foreach($log_categories as $_cat_name => $_cat)
 }
 echo '</select><label>Log formats</label></div></div></div>';
 
+/* Str pattern */
+echo '<div class="row"><div class="col s12 m3"><label for="strpattern">Pattern</label>'
+    .'<input class="blue-text text-darken-2" id="strpattern" type="text" name="strpattern" value="'.$u_pattern.'"></div>';
 
 /* Srcip pattern */
-echo '<div class="row"><div class="col s12 m3"><label for="srcippattern">Src IP</label>'
+echo '<div class="col s12 m3"><label for="srcippattern">Src IP</label>'
     .'<input class="blue-text text-darken-2" id="srcippattern" type="text" name="srcippattern" value="'.$u_srcip.'"></div>';
 
 /* Rule pattern */
@@ -412,11 +406,11 @@ echo '<div class="row"><div class="col s12 m3"><label for="locationpattern">Loca
 
 /* Rule pattern */
 echo '<div class="col s12 m3"><label for="rulepattern">Rule ID</label>'
-    .'<input class="blue-text text-darken-2" id="rulepattern" type="text" name="rulepattern" value="'.$u_rule.'"></div></div>';
+    .'<input class="blue-text text-darken-2" id="rulepattern" type="text" name="rulepattern" value="'.$u_rule.'"></div>';
 
 
 /* Max Alerts  */
-echo '<div class="row"><div class="col s12 m3"><label for="max_alerts_per_page">Max Alerts</label>'
+echo '<div class="col s12 m3"><label for="max_alerts_per_page">Max Alerts</label>'
     .'<input class="blue-text text-darken-2" id="max_alerts_per_page" type="text" name="max_alerts_per_page" value="'.$ossec_max_alerts_per_page.'"></div></div>';
 
 
