@@ -13,11 +13,17 @@ define(["ossec"], function() {
 
         initsearch: function() {
             var options = {
-                format: "yyyy-mm-dd",
-                onSet: ossec.addtime
+                format: "yyyy-mm-dd"
             };
+
+            var optt = {
+                format: "HH:i"
+            };
+
             $('#i_date_a').pickadate(options);
             $('#f_date_a').pickadate(options);
+            $('#i_time_a').pickatime(optt);
+            $('#f_time_a').pickatime(optt);
             $('select').material_select();
         },
 
@@ -49,11 +55,6 @@ define(["ossec"], function() {
             window.scrollTo(0,0);
             $("#topbut").hide();
             ossec.setscroll();
-        },
-
-        addtime: function(context) {
-            curs = $(this.$node).val();
-            $(this.$node).val(curs + " 00:00");
         }
     };
     

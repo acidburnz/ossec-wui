@@ -97,20 +97,21 @@ if(isset($_POST['monitoring']) && ($_POST['monitoring'] == 1))
 
 
 /* Reading user input -- being very careful parsing it */
-$datepattern = "/^([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2})$/";
-if(isset($_POST['initdate']))
+$datepattern = "/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/";
+$timepattern = "/^([0-9]{2}):([0-9]{2})$/";
+if(isset($_POST['initdate']) && isset($_POST['inittime']))
 {
-    if(preg_match($datepattern, $_POST['initdate'], $regs))
+    if(preg_match($datepattern, $_POST['initdate'], $regs) && preg_match($timepattern, $_POST['inittime'], $regt))
     {
-        $USER_init = mktime($regs[4], $regs[5], 0,$regs[2],$regs[3],$regs[1]);
+        $USER_init = mktime($regt[1], $regt[2], 0,$regs[2],$regs[3],$regs[1]);
         $u_init_time = $USER_init;
     }
 }
-if(isset($_POST['finaldate']))
+if(isset($_POST['finaldate']) && isset($_POST['finaltime']))
 {
-    if(preg_match($datepattern, $_POST['finaldate'], $regs) == true)
+    if(preg_match($datepattern, $_POST['finaldate'], $regs) && preg_match($timepattern, $_POST['finaltime'], $regt))
     {
-        $USER_final = mktime($regs[4], $regs[5], 0,$regs[2],$regs[3],$regs[1]);
+        $USER_final = mktime($regt[1], $regt[2], 0,$regs[2],$regs[3],$regs[1]);
         $u_final_time = $USER_final;
     }
 }
@@ -298,8 +299,10 @@ echo '<div class="row"><div class="col s12 m2"><p>
         <input name="monitoring" type="radio" value="0" id="monf" '.$monf.'/>
         <label for="monf">Date</label>
       </p></div>'
-      .'<div class="col s12 m3"><label for="i_date_a">From</label><input type="date" name="initdate" id="i_date_a" value="'.date('Y-m-d H:i', $u_init_time).'"/></div>'
-      .'<div class="col s12 m3"><label for="f_date_a">To</label><input type="date" name="finaldate" id="f_date_a" value="'.date('Y-m-d H:i', $u_final_time).'"/></div>'
+      .'<div class="col s12 m3"><label for="i_date_a">From Date</label><input class="blue-text text-darken-2" type="date" name="initdate" id="i_date_a" value="'.date('Y-m-d', $u_init_time).'"/>'
+      .'<label for="i_time_a">From Time</label><input class="blue-text text-darken-2" type="time" name="inittime" id="i_time_a" value="'.date('H:i', $u_init_time).'"/></div>'
+      .'<div class="col s12 m3"><label for="f_date_a">To Date</label><input class="blue-text text-darken-2" type="date" name="finaldate" id="f_date_a" value="'.date('Y-m-d', $u_final_time).'"/>'
+      .'<label for="f_time_a">To Time</label><input class="blue-text text-darken-2" type="time" name="finaltime" id="f_time_a" value="'.date('H:i', $u_final_time).'"/></div>'
       .'</div>';
 
 echo '<div class="row"><div class="col s12 m2"><p>
@@ -363,7 +366,7 @@ echo '</select><label>Category</label></div></div></div>';
 
 /* Str pattern */
 echo '<div class="row"><div class="col s12 m3"><label for="strpattern">Pattern</label>'
-    .'<input id="strpattern" type="text" name="strpattern" value="'.$u_pattern.'"></div>';
+    .'<input class="blue-text text-darken-2" id="strpattern" type="text" name="strpattern" value="'.$u_pattern.'"></div>';
 
 /* Log formats */
 echo '<div class="col s12 m3"><div class="input-field col s12 m5 blue-text text-darken-2"><select name="logpattern">';
@@ -395,26 +398,26 @@ echo '</select><label>Log formats</label></div></div></div>';
 
 /* Srcip pattern */
 echo '<div class="row"><div class="col s12 m3"><label for="srcippattern">Src IP</label>'
-    .'<input id="srcippattern" type="text" name="srcippattern" value="'.$u_srcip.'"></div>';
+    .'<input class="blue-text text-darken-2" id="srcippattern" type="text" name="srcippattern" value="'.$u_srcip.'"></div>';
 
 /* Rule pattern */
 echo '<div class="col s12 m3"><label for="userpattern">User</label>'
-    .'<input id="userpattern" type="text" name="userpattern" value="'.$u_user.'"></div></div>';
+    .'<input class="blue-text text-darken-2" id="userpattern" type="text" name="userpattern" value="'.$u_user.'"></div></div>';
 
 
 /* Location */
 echo '<div class="row"><div class="col s12 m3"><label for="locationpattern">Location</label>'
-    .'<input id="locationpattern" type="text" name="locationpattern" value="'.$u_rule.'"></div>';
+    .'<input class="blue-text text-darken-2" id="locationpattern" type="text" name="locationpattern" value="'.$u_rule.'"></div>';
 
 
 /* Rule pattern */
 echo '<div class="col s12 m3"><label for="rulepattern">Rule ID</label>'
-    .'<input id="rulepattern" type="text" name="rulepattern" value="'.$u_rule.'"></div></div>';
+    .'<input class="blue-text text-darken-2" id="rulepattern" type="text" name="rulepattern" value="'.$u_rule.'"></div></div>';
 
 
 /* Max Alerts  */
 echo '<div class="row"><div class="col s12 m3"><label for="max_alerts_per_page">Max Alerts</label>'
-    .'<input id="max_alerts_per_page" type="text" name="max_alerts_per_page" value="'.$ossec_max_alerts_per_page.'"></div></div>';
+    .'<input class="blue-text text-darken-2" id="max_alerts_per_page" type="text" name="max_alerts_per_page" value="'.$ossec_max_alerts_per_page.'"></div></div>';
 
 
 /* Agent */
