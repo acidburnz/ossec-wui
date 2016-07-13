@@ -13,7 +13,7 @@
 /* OS PHP init */
 if (!function_exists('os_handle_start'))
 {
-    echo "<b class='red'>You are not allowed direct access.</b><br />\n";
+    echo "<b class='red'>You are not allowed direct access.</b>\n";
     return(1);
 }
 
@@ -457,11 +457,11 @@ if($output_list == NULL || $output_list[1] == NULL)
 {
     if($used_stored == 1)
     {
-        echo "<b class='red'>Nothing returned (search expired). </b>";
+        echo "<b class='red'>Nothing returned (search expired). </b></div></div>";
     }
     else
     {
-        echo "<b class='red'>Nothing returned. </b><br />";
+        echo "<b class='red'>Nothing returned. </b><br /></div></div>";
     }
     return(1);
 }
@@ -470,10 +470,9 @@ if($output_list == NULL || $output_list[1] == NULL)
 /* Checking for no return */
 if(!isset($output_list[0]{'count'}))
 {
-    echo "<b class='red'>Nothing returned. </b><br />\n";
+    echo '<b class="red">Nothing returned. </b></div></div>';
     return(1);
 }
-
 
 /* Checking maximum page size */
 if($USER_page >= $output_list[0]{'pg'})
@@ -485,36 +484,27 @@ if($USER_page >= $output_list[0]{'pg'})
 $real_page = ($output_list[0]{'pg'} + 1) - $USER_page;
 
 
-echo '<div><b>Total alerts found: </b>'.$output_list[0]{'count'}.'</div>';
-
 if($output_list[0]{'pg'} > 1)
 {
-    echo "<b>Output divided in </b>".
-         $output_list[0]{'pg'}." pages.<br />";
+    echo '<div><form name="dopage" method="post" action="index.php?f=s">';
+    echo '<input type="submit" name="search" value="<< First" class="btn-flat green-text text-darken-2" />
+          <input type="submit" name="search" value="< Prev" class="btn-flat green-text text-darken-2" />';
 
-    echo '<br /><form name="dopage" method="post" action="index.php?f=s">';
-}
-
-
-if($output_list[0]{'pg'} > 1)
-{
-    echo '
-        <input type="submit" name="search" value="<< First" class="button"
-               class="formText" />
-
-        <input type="submit" name="search" value="< Prev" class="button"
-               class="formText" />
-         ';
-
-    echo 'Page <b>'.$USER_page.'</b> ('.$output_list[0]{$real_page}.' alerts)';
+    echo 'Page <b>'.$USER_page.'</b>/'.$output_list[0]{'pg'}.' (<b>'.$output_list[0]{$real_page}.'</b>/'.$output_list[0]{'count'}.' alerts)';
+} else {
+    echo '<div><b>Total alerts found: </b>'.$output_list[0]{'count'}.'</div>';
 }
 
 /* Currently page */
 echo '
     <input type="hidden" name="initdate"
-           value="'.date('Y-m-d H:i', $u_init_time).'" />
+           value="'.date('Y-m-d', $u_init_time).'" />
     <input type="hidden" name="finaldate"
-           value="'.date('Y-m-d H:i', $u_final_time).'" />
+           value="'.date('Y-m-d', $u_final_time).'" />
+    <input type="hidden" name="inittime"
+           value="'.date('H:i', $u_init_time).'" />
+    <input type="hidden" name="finaltime"
+           value="'.date('H:i', $u_final_time).'" />
     <input type="hidden" name="rulepattern" value="'.$u_rule.'" />
     <input type="hidden" name="srcippattern" value="'.$u_srcip.'" />
     <input type="hidden" name="userpattern" value="'.$u_user.'" />
@@ -529,14 +519,9 @@ echo '
 
 if($output_list[0]{'pg'} > 1)
 {
-echo '
-    &nbsp;&nbsp;
-    <input type="submit" name="search" value="Next >" class="button"
-           class="formText" />
-     <input type="submit" name="search" value="Last >>" class="button"
-           class="formText" />
-    </form>
-';
+echo '<input type="submit" name="search" value="Next >" class="btn-flat green-text text-darken-2" />
+     <input type="submit" name="search" value="Last >>" class="btn-flat green-text text-darken-2" />
+     </form></div>';
 }
 
 echo '</div></div>';
@@ -560,6 +545,7 @@ if($fp)
         echo fgets($fp);
     }
 }
+
 
 /* EOF */
 ?>

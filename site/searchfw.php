@@ -147,9 +147,6 @@ if(isset($_POST['max_alerts_per_page']))
     }
 }    
 
-
-echo "<h1>Firewall search options:</h1>\n";
-
 /* Search forms */
 echo '
 <table><tr valign="top">
