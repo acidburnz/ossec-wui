@@ -3,7 +3,6 @@ requirejs.config({
 	baseUrl: "js/",
 	paths: {
             "jquery": "jquery.min",
-            "mustache": "mustache.min",
             "materialize": "materialize.min",
     	},
 	shim : {
@@ -12,7 +11,7 @@ requirejs.config({
 	}
 });
 
-require(["jquery", "materialize", "mustache", "ossec"], function($, Materialise, Mustache, ossec) {
+require(["jquery", "materialize", "ossec"], function($, Materialise, ossec) {
     $(document).ready(function() {
         "use strict";
         console.log("Ready Fire !!");

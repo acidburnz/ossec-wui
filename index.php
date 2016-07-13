@@ -57,7 +57,7 @@ else
     }
 ?>
 
-  <div id="container">
+  <main>
 
 
 <!-- BEGIN: content -->
@@ -153,7 +153,7 @@ else
 
 
     <!-- END: content -->
-    </div>
+    </main>
 
 <?php
     /* Including the footer */

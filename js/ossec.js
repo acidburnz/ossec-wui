@@ -8,7 +8,6 @@ define(["ossec"], function() {
                 $(did).show();
                 $(tid + " > div > i").text("remove_circle");
             }
-
         },
 
         initsearch: function() {
@@ -67,17 +66,6 @@ define(["ossec"], function() {
                $("#sa"+nid).text("(hide)");
                $("."+type+nb).show();
            }
-        },
-
-        togglepage: function(pid) {
-            $("li.active").removeClass("active green darken-2");
-            $("#li"+pid).addClass("active green darken-2");
-            $("div.page").each(function(nb){
-                if($(this).is(":visible")) {
-                    $(this).hide();
-                }
-            });
-            $("#pg"+pid).show();
         }
     };
     

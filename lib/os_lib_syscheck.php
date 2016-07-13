@@ -54,6 +54,7 @@ function __os_getdb($file, $_name)
             $sk_file_sha1 = $regs[5];
             $time_stamp = $regs[6];
             $sk_file_name = $regs[7];
+            $sk_uid = uniqid();
             
             if(strlen($sk_file_name) > 45)
             {
@@ -69,19 +70,19 @@ function __os_getdb($file, $_name)
                 
                 $db_list{$sk_file_name}{'size'} = 
                         $db_list{$sk_file_name}{'size'} . 
-                        "<br />&nbsp;&nbsp; -> &nbsp;&nbsp;<br /> ".
-                        $sk_file_size;
+                        "<br /><i class='material-icons green-text text-darken-2 expand' onclick='\$(\"#s$sk_uid\").toggle();'>navigate_next</i>".
+                        "<span id='s$sk_uid' style='display: none;'><br />".$sk_file_size."</span>";
                 $db_list{$sk_file_name}{'sum'} = 
                         $db_list{$sk_file_name}{'sum'} . 
-                        "<br />&nbsp;&nbsp; -> &nbsp;&nbsp;<br /> ".
-                        "md5 $sk_file_md5 <br />" . "sha1 $sk_file_sha1";
+                        "<br /><i class='material-icons green-text text-darken-2 expand' onclick='\$(\"#n$sk_uid\").toggle();'>navigate_next</i>".
+                        "<span id='n$sk_uid' style='display: none;'><br /><b>md5</b> $sk_file_md5 <br />" . "<b>sha1</b> $sk_file_sha1</span>";
             }
             else
             {
                 $db_list{$sk_file_name}{'time'} = $time_stamp;
                 $db_list{$sk_file_name}{'size'} = $sk_file_size;
-                $db_list{$sk_file_name}{'sum'} = "md5 $sk_file_md5 <br />" .
-                                                 "sha1 $sk_file_sha1";
+                $db_list{$sk_file_name}{'sum'} = "<b>md5</b> $sk_file_md5 <br />" .
+                                                 "<b>sha1</b> $sk_file_sha1";
             }
             
             $db_count++;
