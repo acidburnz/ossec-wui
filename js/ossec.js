@@ -55,6 +55,18 @@ define(["ossec"], function() {
             window.scrollTo(0,0);
             $("#topbut").hide();
             ossec.setscroll();
+        },
+
+        filtera: function(nid, type, nb) {
+           if ($("#st"+nid).text() === "Showing") {
+               $("#st"+nid).text("Hidding");
+               $("#sa"+nid).text("(show)");
+               $("."+type+nb).hide();
+           } else {
+               $("#st"+nid).text("Showing");
+               $("#sa"+nid).text("(hide)");
+               $("."+type+nb).show();
+           }
         }
     };
     

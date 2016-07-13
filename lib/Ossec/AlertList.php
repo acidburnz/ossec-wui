@@ -118,35 +118,6 @@ class Ossec_AlertList {
 
     }
 
-/*    function _tallyNav($histogram, $key, $description, $title ) {
-
-        // Obtain copy of histogram and sort in reverse order by value.
-
-        $tally = $histogram->getRaw( );
-        arsort( $tally ); ?>
-
-        <div class="alert_list_nav">
-            <div class="asmall toggle">
-                <a href="#" title="<?php echo $title ?>" class="black bigg" style="font-weight:bold;"><?php echo $title ?></a>
-                <div class="asmall details" style="display:none">
-                    <?php foreach($tally as $id => $count): ?>
-                        <div id="showing_<?php echo $key ?>_<?php echo $id ?>" class="asmall">
-                            Showing <?php echo $count ?> alert(s) from <b><?php echo $key ?> <?php echo $id ?></b>
-                            <a href="#" class="asmall hide <?php echo $key ?>_<?php echo $id ?>" title="Hide this <?php echo $key ?>">(hide)</a>
-                            <a href="#" class="asmall only <?php echo $key ?>_<?php echo $id ?>" title="Show only this <?php echo $key ?>">(show only)</a>
-                        </div>
-                        <div id="hiding_<?php echo $key ?>_<?php echo $id ?>" class="asmall" style="display:none;">
-                            Hiding <?php echo $count ?> alert(s) from <b><?php echo $key ?> <?php echo $id ?></b>
-                            <a href="#" class="asmall show <?php echo $key ?>_<?php echo $id ?>" title="Hiding <?php echo $key ?>">(show)</a>
-                        </div>
-                    <?php endforeach; ?>
-                    <a href="#" class="asmall clear <?php echo $key ?>" title="Clear <?php echo $description ?> restrictions">Clear <?php echo $key ?> restrictions</a>
-                </div>
-            </div>
-        </div><?php
-
-    } */
-
     function _tallyNav($histogram, $key, $description, $title ) {
        // Obtain copy of histogram and sort in reverse order by value.
 
@@ -156,14 +127,15 @@ class Ossec_AlertList {
        
        $cat = '<div id="cat%s" onclick="ossec.togglesection(\'#cat%s\',\'#catd%s\');" class="expand"><div class="valign-wrapper"><i class="material-icons valign green-text text-darken-3">add_circle</i><span class="valign blue-text text-darken-2">%s</span></div></div>';
        $catd = '<div id="catd%s" style="display:none;" class="detail">';
-       $ele = '<div>%s alert(s) from <b>%s %s</b></div>';
+       $ele = '<div><span id="st%s">Showing</span>&nbsp;%s alert(s) from <b>%s %s</b>&nbsp;<span id="sa%s" class="expand green-text text-darken-2" onclick="ossec.filtera(\'%s\',\'%s\',\'%s\')">(hide)</span></div>';
              
        echo '<div class="alert_list_nav">';
        echo sprintf($cat, $uid, $uid, $uid, $title);
        echo sprintf($catd, $uid);
 
        foreach($tally as $id => $count) {
-           echo sprintf($ele, $count, $key, $id, $key, $id);
+           $luid = uniqid();
+           echo sprintf($ele, $luid, $count, $key, $id, $luid, $luid, $key, $id);
        }       
 
        echo '</div></div>';

@@ -67,7 +67,7 @@ class Ossec_Alert {
             $icolor = "green-text";
         }
 
-        $alert = '<div class="card">'
+        $alert = '<div class="card level'.$this->level.' id'.$this->id.' srcip'.$this->srcip.'">'
                   .'<div class="card-content blue-grey darken-2 white-text">'
                   .'<span class="card-title activator"><div class="valign-wrapper activator"><i class="material-icons left valign '.$icolor.'">'.$icon.'</i><span class="valign activator">'.$date.' - '.$this->location.'</span></div></span>'
                   .'<div><b>Level: </b>'.$this->level.'</div>'
