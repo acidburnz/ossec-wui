@@ -25,6 +25,21 @@ define(["ossec"], function() {
             $('#f_time_a').pickatime(optt);
             $('select').material_select();
         },
+        
+        initsearchf: function() {
+            var options = {
+                format: "yyyy-mm-dd"
+            };
+
+            var optt = {
+                format: "HH:i"
+            };
+
+            $('#i_date_a').pickadate(options);
+            $('#f_date_a').pickadate(options);
+            $('#i_time_a').pickatime(optt);
+            $('#f_time_a').pickatime(optt);
+        },
 
         initsyscheck: function() {
             $('select').material_select();

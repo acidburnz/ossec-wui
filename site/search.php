@@ -13,7 +13,7 @@
 /* OS PHP init */
 if (!function_exists('os_handle_start'))
 {
-    echo "<b class='red'>You are not allowed direct access.</b>\n";
+    echo '<b class="text-red">You are not allowed direct access.</b>';
     return(1);
 }
 
@@ -22,7 +22,7 @@ if (!function_exists('os_handle_start'))
 $ossec_handle = os_handle_start($ossec_dir);
 if($ossec_handle == NULL)
 {
-    echo "Unable to access ossec directory.\n";
+    echo 'Unable to access ossec directory';
     exit(1);
 }
 
@@ -50,222 +50,193 @@ $USER_searchid = 0;
 $USER_monitoring = 0;
 $used_stored = 0;
 
-
 /* Getting search id */
-if(isset($_POST['searchid']))
-{
-    if(preg_match('/^[a-z0-9]+$/', $_POST['searchid']))
-    {
-        $USER_searchid = $_POST['searchid'];
-    }
+$fsearchid = filter_input(INPUT_POST, 'searchid', FILTER_SANITIZE_STRING);
+if ($fsearchid != false && $fsearchid != NULL) {
+    $USER_searchid = $fsearchid;    
 }
 
-if(isset($_POST['monitoring']) && ($_POST['monitoring'] == 1))
-{
+/* is real time monitoring */
+$monitoring = filter_input(INPUT_POST, 'monitoring', FILTER_SANITIZE_NUMBER_INT);
+if ($monitoring != false && $monitoring != NULL) {
+    if ($monitoring == 1) {
+         /* Cleaning up time */
+        $USER_final = $u_final_time;
+        $USER_init = $u_init_time;
+        $USER_monitoring = 1;
 
-    /* Cleaning up time */
-    $USER_final = $u_final_time;
-    $USER_init = $u_init_time;
-    $USER_monitoring = 1;
+        /* Cleaning up fields */
+        $_POST['search'] = "Search";
+        unset($_POST['initdate']);
+        unset($_POST['finaldate']);
+        
+        /* Deleting search */
+        if($USER_searchid != 0)
+        {
+            os_cleanstored($USER_searchid);
+        }
 
-    /* Cleaning up fields */
-    $_POST['search'] = "Search";
-    unset($_POST['initdate']);
-    unset($_POST['finaldate']);
+        /* Refreshing every 90 seconds by default */
+        $m_ossec_refresh_time = $ossec_refresh_time * 1000;
 
-    /* Deleting search */
-    if($USER_searchid != 0)
-    {
-        os_cleanstored($USER_searchid);
-    }
-
-    /* Refreshing every 90 seconds by default */
-    $m_ossec_refresh_time = $ossec_refresh_time * 1000;
-
-    echo '
-        <script language="javascript">
-            setTimeout("document.dosearch.submit()",'.
-            $m_ossec_refresh_time.');
-        </script>
-        ';
+        echo '
+            <script language="javascript">
+                setTimeout("document.dosearch.submit()",'.
+                $m_ossec_refresh_time.');
+            </script>
+            ';
+        }
 }
 
-
-/* Reading user input -- being very careful parsing it */
+/* Getting start/end date */
 $datepattern = "/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/";
 $timepattern = "/^([0-9]{2}):([0-9]{2})$/";
-if(isset($_POST['initdate']) && isset($_POST['inittime']))
-{
-    if(preg_match($datepattern, $_POST['initdate'], $regs) && preg_match($timepattern, $_POST['inittime'], $regt))
-    {
+$initdate = filter_input(INPUT_POST, 'initdate', FILTER_SANITIZE_STRING);
+$inittime = filter_input(INPUT_POST, 'inittime', FILTER_SANITIZE_STRING);
+
+if ($initdate != false && $initdate != NULL && $inittime != false && $inittime != NULL) {
+    if(preg_match($datepattern, $initdate, $regs) && preg_match($timepattern, $inittime, $regt)) {
         $USER_init = mktime($regt[1], $regt[2], 0,$regs[2],$regs[3],$regs[1]);
         $u_init_time = $USER_init;
     }
 }
-if(isset($_POST['finaldate']) && isset($_POST['finaltime']))
-{
-    if(preg_match($datepattern, $_POST['finaldate'], $regs) && preg_match($timepattern, $_POST['finaltime'], $regt))
-    {
+
+$finaldate = filter_input(INPUT_POST, 'finaldate', FILTER_SANITIZE_STRING);
+$finaltime = filter_input(INPUT_POST, 'finaltime', FILTER_SANITIZE_STRING);
+
+if ($finaldate != false && $finaldate != NULL && $finaltime != false && $finaltime != NULL) {
+    if(preg_match($datepattern, $finaldate, $regs) && preg_match($timepattern, $finaltime, $regt)) {
         $USER_final = mktime($regt[1], $regt[2], 0,$regs[2],$regs[3],$regs[1]);
         $u_final_time = $USER_final;
     }
 }
-if(isset($_POST['level']))
-{
-    if((is_numeric($_POST['level'])) &&
-        ($_POST['level'] > 0) &&
-        ($_POST['level'] < 16))
-    {
-        $USER_level = $_POST['level'];
+
+/* Getting level */
+$level = filter_input(INPUT_POST, 'level', FILTER_SANITIZE_NUMBER_INT);
+if ($level != false && $level != NULL) {
+    if ($level > 0 && $level < 16) {
+        $USER_level = $level;
         $u_level = $USER_level;
     }
 }
-if(isset($_POST['page']))
-{
-    if((is_numeric($_POST['page'])) &&
-        ($_POST['page'] > 0) &&
-        ($_POST['page'] <= 999))
-    {
-        $USER_page = $_POST['page'];
+
+/* Getting page */
+$page = filter_input(INPUT_POST, 'page', FILTER_SANITIZE_NUMBER_INT);
+if ($page != false && $page != NULL) {
+    if ($page > 0 && $page <= 999) {
+        $USER_page = $page;
     }
 }
 
-
+/* Getting pattern  */
 $strpattern = "/^[0-9a-zA-Z.: _|^!\-()?]{1,128}$/";
-$intpattern = "/^[0-9]{1,8}$/";
-
-if(isset($_POST['strpattern']))
-{
-   if(preg_match($strpattern, $_POST['strpattern']) == true)
-   {
-       $USER_pattern = $_POST['strpattern'];
-       $u_pattern = $USER_pattern;
-   }
+$strpat = filter_input(INPUT_POST, 'strpattern', FILTER_SANITIZE_STRING);
+if ($strpat != false && $strpat != NULL) {
+    if (preg_match($strpattern, $strpat)) {
+        $USER_pattern = $strpat;
+        $u_pattern = $USER_pattern;    
+    }
 }
-
 
 /* Getting location */
-if(isset($_POST['locationpattern']))
-{
+$location = filter_input(INPUT_POST, 'locationpattern', FILTER_SANITIZE_STRING);
+if ($location != false && $location != NULL) {
     $lcpattern = "/^[0-9a-zA-Z.: _|^!>\/\\-]{1,156}$/";
-    if(preg_match($lcpattern, $_POST['locationpattern']) == true)
-    {
-        $LOCATION_pattern = $_POST['locationpattern'];
+    if(preg_match($lcpattern, $location)) {
+        $LOCATION_pattern = $location;
         $u_location = $LOCATION_pattern;
     }
+            
 }
 
-
 /* Group pattern */
-if(isset($_POST['grouppattern']))
-{
-    if($_POST['grouppattern'] == "ALL")
-    {
+$grouppattern = filter_input(INPUT_POST, 'grouppattern', FILTER_SANITIZE_STRING);
+if ($grouppattern != false && $grouppattern != NULL) {
+    if ($grouppattern == "ALL") {
         $USER_group = NULL;
-    }
-    else if(preg_match($strpattern,$_POST['grouppattern']) == true)
-    {
-        $USER_group = $_POST['grouppattern'];
+    } else if(preg_match($strpattern, $grouppattern)) {
+        $USER_group = $grouppattern;
     }
 }
 
-/* Group pattern */
-if(isset($_POST['logpattern']))
-{
-    if($_POST['logpattern'] == "ALL")
-    {
+/* Log pattern */
+$logpattern = filter_input(INPUT_POST, 'logpattern', FILTER_SANITIZE_STRING);
+if ($logpattern != false && $logpattern != NULL) {
+    if ($logpattern == "ALL") {
         $USER_log = NULL;
-    }
-    else if(preg_match($strpattern,$_POST['logpattern']) == true)
-    {
-        $USER_log = $_POST['logpattern'];
+    } else if(preg_match($strpattern, $logpattern)) {
+        $USER_log = $logpattern;
     }
 }
-
 
 /* Rule pattern */
-if(isset($_POST['rulepattern']))
-{
-   if(preg_match($strpattern, $_POST['rulepattern']) == true)
+$rulepattern = filter_input(INPUT_POST, 'rulepattern', FILTER_SANITIZE_STRING);
+if ($rulepattern != false && $rulepattern != NULL) {
+   if(preg_match($strpattern, $rulepattern) == true)
    {
-       $USER_rule = $_POST['rulepattern'];
+       $USER_rule = $rulepattern;
        $u_rule = $USER_rule;
    }
 }
 
-
 /* Src ip pattern */
-if(isset($_POST['srcippattern']))
-{
-   if(preg_match($strpattern, $_POST['srcippattern']) == true)
-   {
-       $USER_srcip = $_POST['srcippattern'];
+$ippattern = "/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/";
+$srcip = filter_input(INPUT_POST, 'srcippattern', FILTER_SANITIZE_STRING);
+if ($srcip != false && $srcip != NULL) {
+    if (preg_match($ippattern, $srcip)) {
+       $USER_srcip = $srcip;
        $u_srcip = $USER_srcip;
-   }
+    }
 }
 
-
 /* User pattern */
-if(isset($_POST['userpattern']))
-{
-   if(preg_match($strpattern, $_POST['userpattern']) == true)
+$userpattern = filter_input(INPUT_POST, 'userpattern', FILTER_SANITIZE_STRING);
+if ($userpattern != false && $userpattern != NULL) {
+   if(preg_match($strpattern, $userpattern) == true)
    {
-       $USER_user = $_POST['userpattern'];
+       $USER_user = $userpattern;
        $u_user = $USER_user;
    }
 }
 
-
 /* Maximum number of alerts */
-if(isset($_POST['max_alerts_per_page']))
-{
-    if(preg_match($intpattern, $_POST['max_alerts_per_page']) == true)
-    {
-        if(($_POST['max_alerts_per_page'] > 200) &&
-           ($_POST['max_alerts_per_page'] < 10000))
-        {
-            $ossec_max_alerts_per_page = $_POST['max_alerts_per_page'];
-        }
+$maxalerts = filter_input(INPUT_POST, 'max_alerts_per_page', FILTER_SANITIZE_NUMBER_INT);
+if ($maxalerts != false && $maxalerts != NULL) {
+    if ($maxalerts > 200 && $maxalerts < 10000) {
+        $ossec_max_alerts_per_page = $maxalerts;
     }
 }
 
-
-
 /* Getting search id  -- should be enough to avoid duplicates */
-if( array_key_exists( 'search', $_POST ) ) {
-    if($_POST['search'] == "Search")
-    {
+$search = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_STRING);
+if ($search != false && $search != NULL) {
+    if ($search == "Search") {
         /* Creating new search id */
         $USER_searchid = md5(uniqid(rand(), true));
         $USER_page = 1;
     }
-    else if($_POST['search'] == "<< First")
-    {
+    else if ($search == "First") {
         $USER_page = 1;
     }
-    else if($_POST['search'] == "< Prev")
-    {
+    else if ($search == "Prev") {
         if($USER_page > 1)
 	    {
 	        $USER_page--;
 	    }
-	}
-	else if($_POST['search'] == "Next >")
-	{
-	    $USER_page++;
-	}
-	else if($_POST['search'] == "Last >>")
-	{
-	    $USER_page = 999;
-	}
-	else if($_POST['search'] == "")
-	{
-	}
-	else
-	{
-	    echo '<b class="red">Invalid search.</b>';
-	    return;
-	}
+    }
+    else if ($search == "Next") {
+        $USER_page++;
+    }
+    else if ($search == "Last") {
+        $USER_page = 999;
+    }
+    else if ($search == "") {
+        
+    }
+    else {
+        echo '<b class="red-text">Invalid search.</b>';
+        return;
+    }
 }
 
 /* Printing current date */
@@ -347,13 +318,11 @@ foreach($global_categories as $_cat_name => $_cat)
         }
         if(strpos($cat_name, "(all)") !== FALSE)
         {
-            echo '<option class="bluez" '.$sl.
-                 ' value="'.$cat_val.'">'.$cat_name.'</option>';
+            echo '<option'.$sl.' value="'.$cat_val.'">'.$cat_name.'</option>';
         }
         else
         {
-            echo '<option value="'.$cat_val.'" '.$sl.
-                 '> &nbsp; '.$cat_name.'</option>';
+            echo '<option value="'.$cat_val.'" '.$sl.'> &nbsp; '.$cat_name.'</option>';
         }
     }
 }
@@ -374,13 +343,11 @@ foreach($log_categories as $_cat_name => $_cat)
         }
         if(strpos($cat_name, "(all)") !== FALSE)
         {
-            echo '<option class="bluez" '.$sl.
-                 ' value="'.$cat_val.'">'.$cat_name.'</option>';
+            echo '<option'.$sl.' value="'.$cat_val.'">'.$cat_name.'</option>';
         }
         else
         {
-            echo '<option value="'.$cat_val.'" '.$sl.
-                 '> &nbsp; '.$cat_name.'</option>';
+            echo '<option value="'.$cat_val.'" '.$sl.'> &nbsp; '.$cat_name.'</option>';
         }
     }
 }
@@ -401,7 +368,7 @@ echo '<div class="col s12 m3"><label for="userpattern">User</label>'
 
 /* Location */
 echo '<div class="row"><div class="col s12 m3"><label for="locationpattern">Location</label>'
-    .'<input class="blue-text text-darken-2" id="locationpattern" type="text" name="locationpattern" value="'.$u_rule.'"></div>';
+    .'<input class="blue-text text-darken-2" id="locationpattern" type="text" name="locationpattern" value="'.$u_location.'"></div>';
 
 
 /* Rule pattern */
@@ -434,7 +401,7 @@ $output_list = NULL;
 
 
 /* Getting stored alerts */
-if($_POST['search'] != "Search")
+if($search != "Search")
 {
     $output_list = os_getstoredalerts($ossec_handle, $USER_searchid);
     $used_stored = 1;
@@ -443,7 +410,6 @@ if($_POST['search'] != "Search")
 /* Searching for new ones */
 else
 {
-    /* Getting alerts */
     $output_list = os_searchalerts($ossec_handle, $USER_searchid,
                                    $USER_init, $USER_final,
                                    $ossec_max_alerts_per_page,
@@ -487,8 +453,8 @@ $real_page = ($output_list[0]{'pg'} + 1) - $USER_page;
 if($output_list[0]{'pg'} > 1)
 {
     echo '<div><form name="dopage" method="post" action="index.php?f=s">';
-    echo '<input type="submit" name="search" value="<< First" class="btn-flat green-text text-darken-2" />
-          <input type="submit" name="search" value="< Prev" class="btn-flat green-text text-darken-2" />';
+    echo '<input type="submit" name="search" value="First" class="btn-flat green-text text-darken-2" />
+          <input type="submit" name="search" value="Prev" class="btn-flat green-text text-darken-2" />';
 
     echo 'Page <b>'.$USER_page.'</b>/'.$output_list[0]{'pg'}.' (<b>'.$output_list[0]{$real_page}.'</b>/'.$output_list[0]{'count'}.' alerts)';
 } else {
@@ -519,8 +485,8 @@ echo '
 
 if($output_list[0]{'pg'} > 1)
 {
-echo '<input type="submit" name="search" value="Next >" class="btn-flat green-text text-darken-2" />
-     <input type="submit" name="search" value="Last >>" class="btn-flat green-text text-darken-2" />
+echo '<input type="submit" name="search" value="Next" class="btn-flat green-text text-darken-2" />
+     <input type="submit" name="search" value="Last" class="btn-flat green-text text-darken-2" />
      </form></div>';
 }
 

@@ -8,10 +8,14 @@ ini_set('include_path', ini_get('include_path').':'.dirname(__FILE__).'/lib');
 
 
 /* Getting user argument (page) */
-$USER_f = false;
+/*$USER_f = false;
 if(isset($_GET['f']))
 {
 	$USER_f = $_GET['f'];
+}*/
+$userf = filter_input(INPUT_GET, 'f', FILTER_SANITIZE_STRING);
+if ($userf != false) {
+    $USER_f = $userf;
 }
 /* If nothing is set, default to the main page. */
 else
@@ -41,7 +45,7 @@ else
         <link rel="stylesheet" href="css/materialize.min.css" type="text/css" />
 	</head>
     
-<body class="grey lighten-1">
+<body class="grey lighten-1 teal-text text-darken-4">
 
 <?php 
     /* Defining the error messages */

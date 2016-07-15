@@ -27,7 +27,7 @@ main {
 
 h5.topt {
     padding-bottom: 2px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid color('teal','darken-4');
 }
 
 h5.logo {
@@ -40,7 +40,11 @@ h5.logo {
 }
 
 div.detail {
-    margin: 5px;
+    margin: 5px 5px 10px 5px;
+    padding: 5px 5px 5px 10px;
+    background-color: color('teal', 'lighten-2');
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px color('teal','darken-4');
 }
 
 div.logo {
@@ -48,6 +52,6 @@ div.logo {
 }
 
 .ovalign {
-   vertical-align:middle;
+   vertical-align: middle;
 }
 

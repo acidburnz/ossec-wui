@@ -25,6 +25,8 @@ require(["jquery", "materialize", "ossec"], function($, Materialise, ossec) {
             ossec.initsearch();
         } else if (window.location.search === "?f=t") {
             ossec.initstats();
+        } else if (window.location.search === "?f=sf") {
+            ossec.initsearchf();
         }
         
     });

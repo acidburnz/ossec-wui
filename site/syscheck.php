@@ -15,28 +15,13 @@
 $u_agent = "ossec-server";
 $u_file = "";
 $USER_agent = NULL;
-$USER_file = NULL;
-
 
 /* Getting user patterns */
-$strpattern = "/^[0-9a-zA-Z.:_^ -]{1,128}$/";
-if(isset($_POST['agentpattern']))
-{
-    if(preg_match($strpattern, $_POST['agentpattern']) == true)
-    {
-        $USER_agent = $_POST['agentpattern'];
-        $u_agent = $USER_agent;
-    }
+$agentpat = filter_input(INPUT_POST, 'agentpattern', FILTER_SANITIZE_STRING);
+if ($agentpat != false && $agentpat != NULL) {
+    $USER_agent = $agentpat;
+    $u_agent = $USER_agent;
 }
-if(isset($_POST['filepattern']))
-{
-    if(preg_match($strpattern, $_POST['filepattern']) == true)
-    {
-        $USER_file = $_POST['filepattern'];
-        $u_file = $USER_file;
-    }
-}      
-
 
 /* OS PHP init */
 if (!function_exists('os_handle_start'))
@@ -45,7 +30,6 @@ if (!function_exists('os_handle_start'))
     return(1);
 }
 
-
 /* Starting handle */
 $ossec_handle = os_handle_start($ossec_dir);
 if($ossec_handle == NULL)
@@ -53,7 +37,6 @@ if($ossec_handle == NULL)
     echo "Unable to access ossec directory.\n";
     return(1);
 }
-
 
 /* Getting syscheck information */
 $syscheck_list = os_getsyscheck($ossec_handle);
@@ -86,13 +69,21 @@ echo '<div class="col s12 m4"><input type="submit" name="ss" value="Dump databas
 echo '</div></form></div>';
 
 /* Dumping database */
-if( array_key_exists( 'ss', $_POST ) ) {
+$dps = filter_input(INPUT_POST, 'ss', FILTER_SANITIZE_STRING);
+if ($dps != false && $dps != NULL) {
+    if ($USER_agent != NULL) {
+        os_syscheck_dumpdb($ossec_handle, $USER_agent);
+        return(1);
+    }
+}
+
+/*if( array_key_exists( 'ss', $_POST ) ) {
     if(($_POST['ss'] == "Dump database") && ($USER_agent != NULL))
     {
         os_syscheck_dumpdb($ossec_handle, $USER_agent);
         return(1);
     }
-}
+}*/
 
 /* Last modified files */
 if(($syscheck_list == NULL) || ($syscheck_list{'global_list'} == NULL))

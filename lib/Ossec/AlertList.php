@@ -127,7 +127,7 @@ class Ossec_AlertList {
        
        $cat = '<div id="cat%s" onclick="ossec.togglesection(\'#cat%s\',\'#catd%s\');" class="expand"><div class="valign-wrapper"><i class="material-icons valign green-text text-darken-3">add_circle</i><span class="valign blue-text text-darken-2">%s</span></div></div>';
        $catd = '<div id="catd%s" style="display:none;" class="detail">';
-       $ele = '<div><span id="st%s">Showing</span>&nbsp;%s alert(s) from <b>%s %s</b>&nbsp;<span id="sa%s" class="expand green-text text-darken-2" onclick="ossec.filtera(\'%s\',\'%s\',\'%s\')">(hide)</span></div>';
+       $ele = '<div><span id="st%s">Showing</span>&nbsp;%s alert(s) from <b>%s %s</b>&nbsp;<span id="sa%s" class="expand green-text text-darken-4" onclick="ossec.filtera(\'%s\',\'%s\',\'%s\')">(hide)</span></div>';
              
        echo '<div class="alert_list_nav">';
        echo sprintf($cat, $uid, $uid, $uid, $title);

@@ -47,22 +47,26 @@ $USER_action = NULL;
 $USER_location = NULL;
 $USER_protocol = NULL;
 
+/* generic pattern */
+$intpattern = "/^[0-9]{1,8}$/";
+$strpattern = "/^[0-9a-zA-Z.: _|^!\-()?]{1,128}$/";
 
 /* Reading user input -- being very careful parsing it */
-$datepattern = "/^([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2})$/";
-if(isset($_POST['initdate']))
-{             
-    if(preg_match($datepattern, $_POST['initdate'], $regs))
+$datepattern = "/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/";
+$timepattern = "/^([0-9]{2}):([0-9]{2})$/";
+if(isset($_POST['initdate']) && isset($_POST['inittime']))
+{
+    if(preg_match($datepattern, $_POST['initdate'], $regs) && preg_match($timepattern, $_POST['inittime'], $regt))
     {
-        $USER_init = mktime($regs[4], $regs[5], 0,$regs[2],$regs[3],$regs[1]);
+        $USER_init = mktime($regt[1], $regt[2], 0,$regs[2],$regs[3],$regs[1]);
         $u_init_time = $USER_init;
     }
 }
-if(isset($_POST['finaldate']))
-{             
-    if(preg_match($datepattern, $_POST['finaldate'], $regs) == true)
+if(isset($_POST['finaldate']) && isset($_POST['finaltime']))
+{
+    if(preg_match($datepattern, $_POST['finaldate'], $regs) && preg_match($timepattern, $_POST['finaltime'], $regt))
     {
-        $USER_final = mktime($regs[4], $regs[5], 0,$regs[2],$regs[3],$regs[1]);
+        $USER_final = mktime($regt[1], $regt[2], 0,$regs[2],$regs[3],$regs[1]);
         $u_final_time = $USER_final;
     }
 }
@@ -133,7 +137,6 @@ if(isset($_POST['action']))
    }
 }
 
-
 /* Maximum number of alerts */
 if(isset($_POST['max_alerts_per_page']))
 {
@@ -148,106 +151,53 @@ if(isset($_POST['max_alerts_per_page']))
 }    
 
 /* Search forms */
-echo '
-<table><tr valign="top">
-<form name="dosearch" method="post" action="index.php?f=sf">
-    <td>From: </td><td><input type="text" name="initdate" 
-    id="i_date_a" size="17"
-    value="'.date('Y-m-d H:i', $u_init_time).'" maxlength="16" 
-    class="formText" />
-    <img src="img/calendar.gif" id="i_trigger" title="Date selector" 
-    class="formText" />
-    </td><td>
-    To: </td><td><input type="text" name="finaldate" id="f_date_a" size="17"
-    value="'.date('Y-m-d H:i', $u_final_time).'" maxlength="16" 
-    class="formText" />
-    <img src="img/calendar.gif" id="f_trigger" title="Date selector" 
-    class="formText" />
-    </td>
-    </tr>
-';
-
+echo '<form name="dosearch" method="post" action="index.php?f=sf">';
+/* time field */
+echo '<div class="row"><div class="col s12 m3">'
+     .'<label for="i_date_a">From Date</label><input class="blue-text text-darken-2" type="date" name="initdate" id="i_date_a" value="'.date('Y-m-d', $u_init_time).'"/>'
+     .'<label for="i_time_a">From Time</label><input class="blue-text text-darken-2" type="time" name="inittime" id="i_time_a" value="'.date('H:i', $u_init_time).'"/></div>'
+     .'<div class="col s12 m3"><label for="f_date_a">To Date</label><input class="blue-text text-darken-2" type="date" name="finaldate" id="f_date_a" value="'.date('Y-m-d', $u_final_time).'"/>'
+     .'<label for="f_time_a">To Time</label><input class="blue-text text-darken-2" type="time" name="finaltime" id="f_time_a" value="'.date('H:i', $u_final_time).'"/></div>'
+     .'</div>';
 
 /* Srcip pattern */
-echo '<tr><td>    
-    Srcip: </td><td>
-    <input type="text" name="srcippattern" size="16" class="formText" 
-                    value="'.$u_srcip.'"/>&nbsp;&nbsp;';
+echo '<div class="row"><div class="col s12 m3"><label for="srcippattern">Src IP</label>'
+    .'<input class="blue-text text-darken-2" id="srcippattern" type="text" name="srcippattern" value="'.$u_srcip.'"></div>';
 
 /* Dst pattern */
-echo '</td><td>
-    Dstip: </td><td><input type="text" name="dstippattern" size="8" 
-                    value="'.$u_dstip.'" class="formText" /></td></tr>';
-                    
-/* Srcport pattern */
-echo '<tr><td>    
-    Src port: </td><td>
-    <input type="text" name="srcportpattern" size="16" class="formText" 
-                    value="'.$u_srcport.'"/>&nbsp;&nbsp;';
+echo '<div class="col s12 m3"><label for="dstippattern">Dst IP</label>'
+    .'<input class="blue-text text-darken-2" id="dstippattern" type="text" name="dstippattern" value="'.$u_dstip.'"></div>';
 
-/* Dstport pattern */
-echo '</td><td>
-    Dst port: </td><td><input type="text" name="dstportpattern" size="8" 
-                    value="'.$u_dstport.'" class="formText" /></td></tr>';
+/* Src Port */
+echo '<div class="col s12 m3"><label for="srcportpattern">Src Port</label>'
+    .'<input class="blue-text text-darken-2" id="srcportpattern" type="text" name="srcportpattern" value="'.$u_srcport.'"></div></div>';
+
+/* Dst Port */
+echo '<div class="row"><div class="col s12 m3"><label for="dstportpattern">Dst Port</label>'
+    .'<input class="blue-text text-darken-2" id="dstportpattern" type="text" name="dstportpattern" value="'.$u_dstport.'"></div>';
 
 /* Location */
-echo '<tr><td>    
-    Location: </td><td>
-    <input type="text" name="locationpattern" size="16" class="formText" 
-                    value="'.$u_location.'"/>&nbsp;&nbsp;';
+echo '<div class="col s12 m3"><label for="locationpattern">Location</label>'
+    .'<input class="blue-text text-darken-2" id="locationpattern" type="text" name="locationpattern" value="'.$u_location.'"></div>';
 
-/* Action  */
-echo '</td><td>
-    Action:</td>
-    <td><input type="text" name="actionpattern" size="16"
-    value="'.$u_action.'" class="formText" /></td></tr>';
+/* Action */
+echo '<div class="col s12 m3"><label for="actionpattern">Action</label>'
+    .'<input class="blue-text text-darken-2" id="actionpattern" type="text" name="actionpattern" value="'.$u_action.'"></div></div>';
+
+/* Max Alerts */
+echo '<div class="row"><div class="col s12 m3"><label for="max_alerts_per_page">Max Alerts</label>'
+    .'<input class="blue-text text-darken-2" id="max_alerts_per_page" type="text" name="max_alerts_per_page" value="'.$ossec_max_alerts_per_page.'"></div></div>';
+
+/* Button */
+echo '<div class="row"><div class="col s12 m3"><input type="submit" name="search" value="Search" class="btn"></div></div>';
+echo '</form>';
     
-    
-/* Max Alerts  */
-echo '</tr><td>
-    Max Alerts:</td>
-    <td><input type="text" name="max_alerts_per_page" size="8"
-    value="'.$ossec_max_alerts_per_page.'" class="formText" /></td></tr>';
-
-    
-/* Final form */
-echo '
-    <tr><td>                    
-    <input type="submit" name="search" value="Search" class="button"
-           class="formText" />
-    </form>
-';
-
-
-echo "</td></tr></table><br /> <br />\n";
-
-
-/* Java script for date */
-echo '
-<script type="text/javascript">
-Calendar.setup({
-button          :   "i_trigger", 
-inputField     :    "i_date_a",
-ifFormat       :    "%Y-%m-%d %H:%M",
-showsTime      :    true,
-timeFormat     :    "24"
-});
-Calendar.setup({
-button          :   "f_trigger", 
-inputField     :    "f_date_a",
-ifFormat       :    "%Y-%m-%d %H:%M",
-showsTime      :    true,
-timeFormat     :    "24"
-});
-</script>
-
-';
-
-echo "<h1>Results:</h1>\n";
+/* show result */
+echo '<div class="row"><div class="col s12"><h5 class="topt">Results:</h5>';
 
 if(!isset($USER_init) || !isset($USER_final))
 {
-    echo "<b>No search performed.</b><br />\n";
+    echo '<b>No search performed.</b></div></div>';
     return(1);
 }
 
@@ -264,10 +214,11 @@ $alert_list = os_searchfw($ossec_handle, $search_id,
                           $USER_action, $USER_location);
 if($alert_list == NULL)
 {
-    echo "<b class='red'>Nothing returned. </b><br />\n";
+    echo '<b class="red-text text-darken-2">Nothing returned</b></div></div>';
 }
 else
 {
+    echo '</div></div>';
     echo "<b>Total entries found: </b>".sizeof($alert_list)."<br /><br />";
 
     /* Printing all available dstips  */
@@ -303,10 +254,10 @@ if($evt_count >= ($ossec_max_alerts_per_page -3))
 $dstip_div = 0;
 $srcip_div = 0;
 
-
-echo '<h2>Alert list</h2>';
-
-
+if($alert_list != NULL) {
+    echo '<h5 class="topt">Alert list</h5>';
+}
+    
 while($evt_count > 0)
 {
     $alert = $alert_list[$evt_count];

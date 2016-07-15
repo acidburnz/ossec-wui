@@ -15,7 +15,7 @@
 /* OS PHP init */
 if (!function_exists('os_handle_start'))
 {
-    echo "<b class='red'>You are not allowed direct access.</b><br />\n";
+    echo '<b class="text-red">You are not allowed direct access.</b>';
     return(1);
 }
 
@@ -23,7 +23,7 @@ if (!function_exists('os_handle_start'))
 $ossec_handle = os_handle_start($ossec_dir);
 if($ossec_handle == NULL)
 {
-    echo "<b class='red'>Unable to access ossec directory.</b><br />\n";
+    echo '<b class="text-red">Unable to access ossec directory.</b>';
     return(1);
 }
 
@@ -34,39 +34,27 @@ $curr_day = date('d',$curr_time);
 $curr_month = date('m', $curr_time);
 $curr_year = date('Y', $curr_time);
 
-
 /* Getting user values */
-if(isset($_POST['day']))
-{
-    if(is_numeric($_POST['day']))
-    {
-        if(($_POST['day'] >= 0) && ($_POST['day'] <= 31))
-        {
-            $USER_day = $_POST['day'];
-        }
-    }
-}
-if(isset($_POST['month']))
-{
-    if(is_numeric($_POST['month']))
-    {
-        if(($_POST['month'] > 0) && ($_POST['month'] <= 12))
-        {
-            $USER_month = $_POST['month'];
-        }
-    }
-}
-if(isset($_POST['year']))
-{
-    if(is_numeric($_POST['year']))
-    {
-        if(($_POST['year'] >= 1) && ($_POST['year'] <= 3000))
-        {
-            $USER_year = $_POST['year'];
-        }
+$day = filter_input(INPUT_POST, 'day', FILTER_SANITIZE_NUMBER_INT);
+if (($day != false && $day != NULL) || $day == 0 ) {
+    if ($day >= 0 && $day <= 31) {
+        $USER_day = $day;
     }
 }
 
+$month = filter_input(INPUT_POST, 'month', FILTER_SANITIZE_NUMBER_INT);
+if ($month != false) {
+    if ($month > 0 && $month <= 12) {
+        $USER_month = $month;
+    }
+}
+
+$year = filter_input(INPUT_POST, 'year', FILTER_SANITIZE_NUMBER_INT);
+if ($year != false) {
+    if ($year >= 1 && $year <= 3000) {
+        $USER_year = $year;
+    }
+}
 
 /* Building stat times */
 if(isset($USER_year) && isset($USER_month) && isset($USER_day))
