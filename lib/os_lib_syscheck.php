@@ -70,12 +70,12 @@ function __os_getdb($file, $_name)
                 
                 $db_list{$sk_file_name}{'size'} = 
                         $db_list{$sk_file_name}{'size'} . 
-                        "<br /><i class='material-icons green-text text-darken-2 expand' onclick='\$(\"#s$sk_uid\").toggle();'>navigate_next</i>".
-                        "<span id='s$sk_uid' style='display: none;'><br />".$sk_file_size."</span>";
+                        "<br /><i class='material-icons green-text text-darken-2'>navigate_next</i>".
+                        "<span><br />".$sk_file_size."</span>";
                 $db_list{$sk_file_name}{'sum'} = 
                         $db_list{$sk_file_name}{'sum'} . 
-                        "<br /><i class='material-icons green-text text-darken-2 expand' onclick='\$(\"#n$sk_uid\").toggle();'>navigate_next</i>".
-                        "<span id='n$sk_uid' style='display: none;'><br /><b>md5</b> $sk_file_md5 <br />" . "<b>sha1</b> $sk_file_sha1</span>";
+                        "<br /><i class='material-icons green-text text-darken-2'>navigate_next</i>".
+                        "<span><br /><b>md5</b> $sk_file_md5 <br />" . "<b>sha1</b> $sk_file_sha1</span>";
             }
             else
             {
@@ -100,12 +100,16 @@ function __os_getdb($file, $_name)
         foreach ($mod_list as $mod_date => $val)
         {
             echo "<div><b>".date('Y M d', $mod_date)."</b>&nbsp; &nbsp;";
-            echo '<a class="blue-text text-darken-2" href="#id_'.$val[0].'">'.$val[1].'</a></div>';   
+            //echo '<a class="blue-text text-darken-2" href="#id_'.$val[0].'">'.$val[1].'</a></div>';   
+            echo '<span class="blue-text text-darken-2 expand" onclick="ossec.filtertable(\''.$val[1].'\')">'.$val[1].'</span></div>';
         }
     }
     
     echo '</div><div class="col s8">';
     echo '<h5 class="topt">Integrity Checking database: '. $_name .'</h5>';
+    echo '<div class="row"><div class="col s12 m7"><label for="tfilter">Filter</label><input type="text" id="tfilter" class="blue-text text-darken-2"></div>'
+         .'<div class="col s12 m3"><button class="btn" onclick="ossec.SimpleTableFilter(\'#tfilter\');">Filter</button>'
+         .'&nbsp;<button class="btn" onclick="ossec.cleartablefilter();">Clear</button></div></div>';
     
 
     /* Printing db */

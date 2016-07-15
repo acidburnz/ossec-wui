@@ -81,9 +81,27 @@ define(["ossec"], function() {
                $("#sa"+nid).text("(hide)");
                $("."+type+nb).show();
            }
+        },
+        
+        filtertable: function(filter) {
+            $("#tfilter").val(filter);
+            ossec.SimpleTableFilter('#tfilter');
+            window.scrollTo(0,0);
+        },
+        
+        SimpleTableFilter: function(input) {
+            var val = new RegExp($(input).val(), 'i');
+               $("tr").hide();
+               $("tr").filter(function() {
+                   return val.test($(this).text());
+               }).show();
+        },
+        
+        cleartablefilter: function() {
+            $('tr').show();
         }
     };
     
     window.ossec = ossec;
     return ossec;
-})
+});
