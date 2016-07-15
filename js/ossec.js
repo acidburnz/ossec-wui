@@ -51,8 +51,8 @@ define(["ossec"], function() {
         
         setscroll: function() {
             var options = [{
-                selector: '.nav-wrapper',
-                offset: 200,
+                selector: 'nav',
+                offset: 400,
                 callback: ossec.topbut
             }];
 

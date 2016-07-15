@@ -15,7 +15,7 @@
 /* OS PHP init */
 if (!function_exists('os_handle_start'))
 {
-    echo "<b class='red'>You are not allowed direct access.</b><br />\n";
+    echo '<b class="red-text">You are not allowed direct access.</b>';
     return(1);
 }
 
@@ -24,7 +24,7 @@ if (!function_exists('os_handle_start'))
 $ossec_handle = os_handle_start($ossec_dir);
 if($ossec_handle == NULL)
 {
-    echo "Unable to access ossec directory.\n";
+    echo 'Unable to access ossec directory.';
     exit(1);
 }
 
@@ -54,101 +54,92 @@ $strpattern = "/^[0-9a-zA-Z.: _|^!\-()?]{1,128}$/";
 /* Reading user input -- being very careful parsing it */
 $datepattern = "/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/";
 $timepattern = "/^([0-9]{2}):([0-9]{2})$/";
-if(isset($_POST['initdate']) && isset($_POST['inittime']))
-{
-    if(preg_match($datepattern, $_POST['initdate'], $regs) && preg_match($timepattern, $_POST['inittime'], $regt))
-    {
+$initdate = filter_input(INPUT_POST, 'initdate', FILTER_SANITIZE_STRING);
+$inittime = filter_input(INPUT_POST, 'inittime', FILTER_SANITIZE_STRING);
+
+if ($initdate != false && $initdate != NULL && $inittime != false && $inittime != NULL) {
+    if(preg_match($datepattern, $initdate, $regs) && preg_match($timepattern, $inittime, $regt)) {
         $USER_init = mktime($regt[1], $regt[2], 0,$regs[2],$regs[3],$regs[1]);
         $u_init_time = $USER_init;
     }
 }
-if(isset($_POST['finaldate']) && isset($_POST['finaltime']))
-{
-    if(preg_match($datepattern, $_POST['finaldate'], $regs) && preg_match($timepattern, $_POST['finaltime'], $regt))
-    {
+
+$finaldate = filter_input(INPUT_POST, 'finaldate', FILTER_SANITIZE_STRING);
+$finaltime = filter_input(INPUT_POST, 'finaltime', FILTER_SANITIZE_STRING);
+
+if ($finaldate != false && $finaldate != NULL && $finaltime != false && $finaltime != NULL) {
+    if(preg_match($datepattern, $finaldate, $regs) && preg_match($timepattern, $finaltime, $regt)) {
         $USER_final = mktime($regt[1], $regt[2], 0,$regs[2],$regs[3],$regs[1]);
         $u_final_time = $USER_final;
     }
 }
 
 /* Getting ports */
-if(isset($_POST['srcport']))
-{             
-    if((is_numeric($_POST['srcport'])) && 
-        ($_POST['srcport'] >= 0) &&
-        ($_POST['srcport'] < 65536))
-    {
-        $USER_srcport = $_POST['srcport'];
+$srcport = filter_input(INPUT_POST, 'srcport', FILTER_SANITIZE_NUMBER_INT);
+if ($srcport != false && $srcport != NULL) {
+    if ($srcport >= 0 && $srcport < 65536) {
+        $USER_srcport = $srcport;
         $u_srcport = $USER_srcport;
     }
 }
 
-if(isset($_POST['dstport']))
-{             
-    if((is_numeric($_POST['dstport'])) && 
-        ($_POST['dstport'] >= 0) &&
-        ($_POST['dstport'] < 65536))
-    {
-        $USER_dstport = $_POST['dstport'];
+$dstport = filter_input(INPUT_POST, 'dstport', FILTER_SANITIZE_NUMBER_INT);
+if ($dstport != false && $dstport != NULL) {
+    if ($dstport >= 0 && $dstport < 65536) {
+        $USER_dstport = $dstport;
         $u_dstport = $USER_dstport;
     }
 }
 
-
 /* Getting location */
-if(isset($_POST['locationpattern']))
-{
-    $lcpattern = "/^[0-9a-zA-Z.: _|^!>\/\\-]{1,156}$/";    
-    if(preg_match($lcpattern, $_POST['locationpattern']) == true)
-    {
-        $USER_location = $_POST['locationpattern'];
-        $u_location = $USER_location;
+$location = filter_input(INPUT_POST, 'locationpattern', FILTER_SANITIZE_STRING);
+if ($location != false && $location != NULL) {
+    $lcpattern = "/^[0-9a-zA-Z.: _|^!>\/\\-]{1,156}$/";
+    if(preg_match($lcpattern, $location)) {
+        $LOCATION_pattern = $location;
+        $u_location = $LOCATION_pattern;
     }
+            
 }
 
-
 /* Src ip pattern */
-if(isset($_POST['srcippattern']))
-{
-   if(preg_match($strpattern, $_POST['srcippattern']) == true)
+$ippattern = "/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/";
+$srcippattern = filter_input(INPUT_POST, 'srcippattern', FILTER_SANITIZE_STRING);
+if ($srcippattern != false && $srcippattern != NULL) {
+   if(preg_match($ippattern, $srcippattern))
    {
-       $USER_srcip = $_POST['srcippattern'];
+       $USER_srcip = $srcippattern;
        $u_srcip = $USER_srcip;
    }
 }
 
 /* dst ip */
-if(isset($_POST['dstippattern']))
-{
-    if(preg_match($strpattern, $_POST['dstippattern']) == true)
-    {
-        $USER_dstip = $_POST['dstippattern'];
-        $u_dstip = $USER_dstip;
-    }
-}
-
-/* User pattern */
-if(isset($_POST['action']))
-{
-   if(preg_match($strpattern, $_POST['action']) == true)
+$dstippattern = filter_input(INPUT_POST, 'dstippattern', FILTER_SANITIZE_STRING);
+if ($dstippattern != false && $dstippattern != NULL) {
+   if(preg_match($ippattern, $dstippattern))
    {
-       $USER_action = $_POST['action'];
-       $u_action = $USER_action;
+       $USER_dstip = $dstippattern;
+       $u_dstip = $USER_dstip;
    }
 }
 
+/* User pattern */
+$action = filter_input(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+if ($action != false && $action != NULL) {
+   if(preg_match($strpattern, $action))
+   {
+       $USER_action = $action;
+       $u_action = $USER_action;
+   }    
+}
+
 /* Maximum number of alerts */
-if(isset($_POST['max_alerts_per_page']))
-{
-    if(preg_match($intpattern, $_POST['max_alerts_per_page']) == true)
-    {
-        if(($_POST['max_alerts_per_page'] > 0) &&
-           ($_POST['max_alerts_per_page'] < 200000))
-        {
-            $ossec_max_alerts_per_page = $_POST['max_alerts_per_page'];
-        }
+$maxalerts = filter_input(INPUT_POST, 'max_alerts_per_page', FILTER_SANITIZE_NUMBER_INT);
+if ($maxalerts != false && $maxalerts != NULL) {
+    if ($maxalerts > 200 && $maxalerts < 10000) {
+        $ossec_max_alerts_per_page = $maxalerts;
     }
-}    
+}
 
 /* Search forms */
 echo '<form name="dosearch" method="post" action="index.php?f=sf">';

@@ -14,7 +14,7 @@ if(isset($_GET['f']))
 	$USER_f = $_GET['f'];
 }*/
 $userf = filter_input(INPUT_GET, 'f', FILTER_SANITIZE_STRING);
-if ($userf != false) {
+if ($userf != false && $userf != NULL) {
     $USER_f = $userf;
 }
 /* If nothing is set, default to the main page. */
