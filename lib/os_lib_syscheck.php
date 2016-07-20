@@ -54,7 +54,6 @@ function __os_getdb($file, $_name)
             $sk_file_sha1 = $regs[5];
             $time_stamp = $regs[6];
             $sk_file_name = $regs[7];
-            $sk_uid = uniqid();
             
             if(strlen($sk_file_name) > 45)
             {
@@ -100,7 +99,6 @@ function __os_getdb($file, $_name)
         foreach ($mod_list as $mod_date => $val)
         {
             echo "<div><b>".date('Y M d', $mod_date)."</b>&nbsp; &nbsp;";
-            //echo '<a class="blue-text text-darken-2" href="#id_'.$val[0].'">'.$val[1].'</a></div>';   
             echo '<span class="blue-text text-darken-2 expand" onclick="ossec.filtertable(\''.$val[1].'\')">'.$val[1].'</span></div>';
         }
     }

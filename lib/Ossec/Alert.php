@@ -47,7 +47,7 @@ class Ossec_Alert {
 
         $date    = date('Y/m/d H:i:s', $this->time);
         $id_link = '<a class="blue-text text-lighten-2" href="http://www.ossec.net/doc/search.html?q=rule-id-'.$this->id.'">'.$this->id.'</a>';
-        $message = join( '</br>', $this->msg );
+        $message = join( '<br/>', $this->msg );
 
         $srcip = "";
         if( $this->srcip != '(none)' && $this->srcip != "") {

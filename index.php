@@ -24,7 +24,7 @@ else
 }
 ?>
 
-<html>
+<!DOCTYPE html>
 	<head>
 		<title>OSSEC Web Interface - Open Source Security</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
