@@ -15,7 +15,7 @@
 /* OS PHP init */
 if (!function_exists('os_handle_start'))
 {
-    echo "<b class='red'>You are not allowed direct access.</b><br />\n";
+    echo "<b class='red-text'>You are not allowed direct access.</b><br />\n";
     return(1);
 }
 
@@ -24,14 +24,14 @@ if (!function_exists('os_handle_start'))
 $ossec_handle = os_handle_start($ossec_dir);
 if($ossec_handle == NULL)
 {
-    echo "<b class='red'>Unable to access ossec directory.</b><br />\n";
+    echo "<b class='red-text'>Unable to access ossec directory.</b><br />\n";
     return(1);
 }
 
 
 if(($mapping_list = os_getusermapping($ossec_handle)) == NULL)
 {
-    echo "<b class='red'>No user mapping available. </b><br />\n";
+    echo "<b class='red-text'>No user mapping available. </b><br />\n";
     return(1);
 }
 

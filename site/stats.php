@@ -152,7 +152,7 @@ echo '<option value="'.$curr_year.'" selected="selected">'.$curr_year.'</option>
     <option value="'.($curr_year-2).'">'.($curr_year-2).'</option>
     ';
 echo '</select><label>Year</label></div>'
-     . '<div class="col s12 m3"><input type="submit" name="Stats" value="Change options" class="btn" />'
+     . '<div class="col s12 m3"><input type="submit" name="Stats" value="Change options" class="btn bmtop" />'
      .'</div></form></div>';
 
 

@@ -1,3 +1,10 @@
+The OSSEC Web UI is currently unmaintained and deprecated.
+If you are interested in maintaining the project, please contact the OSSEC team (open an issue, send a message to the mailing list, etc).
+
+We recommend using Kibana, Splunk, or similar projects for monitoring alerts.
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
 OSSEC Web UI v0.9-2
 Copyright (c) 2006-2016 Trend Micro Inc.
 
@@ -12,7 +19,7 @@ Copyright (c) 2006-2016 Trend Micro Inc.
 
 1.1- Clone the web ui script:
 
-    # git clone https://github.com/acidburnz/ossec-wui.git
+    # git clone https://github.com/ossec/ossec-wui.git
 
 
 1.2- Move the folder to somewhere acessible by

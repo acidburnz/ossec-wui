@@ -14,7 +14,6 @@ requirejs.config({
 require(["jquery", "materialize", "ossec"], function($, Materialise, ossec) {
     $(document).ready(function() {
         "use strict";
-        console.log("Ready Fire !!");
         
         ossec.setscroll();
         $(".button-collapse").sideNav();

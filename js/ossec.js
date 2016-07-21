@@ -55,7 +55,7 @@ define(['ossec'], function() {
                 offset: 400,
                 callback: ossec.topbut
             }];
-
+            
             Materialize.scrollFire(options);  
         },
         

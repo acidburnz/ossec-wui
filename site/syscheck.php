@@ -26,7 +26,7 @@ if ($agentpat != false && $agentpat != NULL) {
 /* OS PHP init */
 if (!function_exists('os_handle_start'))
 {
-    echo "<b class='red'>You are not allowed direct access.</b><br />\n";
+    echo "<b class='red-text'>You are not allowed direct access.</b><br />\n";
     return(1);
 }
 
@@ -65,7 +65,7 @@ foreach($syscheck_list as $agent => $agent_name)
 
 echo '</select><label>Agent Name</label></div>';
 
-echo '<div class="col s12 m4"><input type="submit" name="ss" value="Dump database" class="btn"/>';
+echo '<div class="col s12 m4"><input type="submit" name="ss" value="Dump database" class="btn bmtop"/>';
 echo '</div></form></div>';
 
 /* Dumping database */

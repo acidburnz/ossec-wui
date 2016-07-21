@@ -106,8 +106,8 @@ function __os_getdb($file, $_name)
     echo '</div><div class="col s8">';
     echo '<h5 class="topt">Integrity Checking database: '. $_name .'</h5>';
     echo '<div class="row"><div class="col s12 m7"><label for="tfilter">Filter</label><input type="text" id="tfilter" class="blue-text text-darken-2"></div>'
-         .'<div class="col s12 m3"><button class="btn" onclick="ossec.SimpleTableFilter(\'#tfilter\');">Filter</button>'
-         .'&nbsp;<button class="btn" onclick="ossec.cleartablefilter();">Clear</button></div></div>';
+         .'<div class="col s12 m2"><button class="btn bmtop" onclick="ossec.SimpleTableFilter(\'#tfilter\');">Filter</button></div>'
+         .'<div class="col s12 m2"><button class="btn bmtop" onclick="ossec.cleartablefilter();">Clear</button></div></div>';
     
 
     /* Printing db */
@@ -115,15 +115,14 @@ function __os_getdb($file, $_name)
     echo '<thead>
          <tr>
            <th>File name</th>
-           <th>Checksum</th>
-         ';
+           <th>Checksum</th>';
+    
     if($set_size == 1)
     {
         echo '<th>Size</th>';
     }
-    echo '
-         </tr></thead>
-         ';
+    
+    echo '</tr></thead>';
     
     /* Dumping for each entry */
     $db_count = 0;

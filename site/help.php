@@ -15,7 +15,7 @@
 /* OS PHP init */
 if (!function_exists('os_handle_start'))
 {
-    echo "<b class='red'>You are not allowed direct access.</b><br />\n";
+    echo "<b class='red-text'>You are not allowed direct access.</b><br />\n";
     return(1);
 }
 ?>
