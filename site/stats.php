@@ -15,7 +15,7 @@
 /* OS PHP init */
 if (!function_exists('os_handle_start'))
 {
-    echo '<b class="text-red">You are not allowed direct access.</b>';
+    echo '<b class="red-text">You are not allowed direct access.</b>';
     return(1);
 }
 
@@ -23,7 +23,7 @@ if (!function_exists('os_handle_start'))
 $ossec_handle = os_handle_start($ossec_dir);
 if($ossec_handle == NULL)
 {
-    echo '<b class="text-red">Unable to access ossec directory.</b>';
+    echo '<b class="red-text">Unable to access ossec directory.</b>';
     return(1);
 }
 
@@ -152,7 +152,8 @@ echo '<option value="'.$curr_year.'" selected="selected">'.$curr_year.'</option>
     <option value="'.($curr_year-2).'">'.($curr_year-2).'</option>
     ';
 echo '</select><label>Year</label></div>'
-. '<div class="col s12 m3"><input type="submit" name="Stats" value="Change options" class="btn" /></div></form></div>';
+     . '<div class="col s12 m3"><input type="submit" name="Stats" value="Change options" class="btn" />'
+     .'</div></form></div>';
 
 
 echo '<div class="row"><div class="col s12 m3">';
@@ -206,7 +207,7 @@ echo '<table class="responsive-table bordered">
     <th>Value</th>
     <th>Percentage</th>
     </tr>
-    <thead>
+    </thead>
 ';
 
 if( array_key_exists( 'level', $daily_stats ) ) {
@@ -269,7 +270,7 @@ echo '<table class="responsive-table bordered">
     <th>Value</th>
     <th>Percentage</th>
     </tr>
-    <thead>
+    </thead>
 ';
 
 
@@ -465,8 +466,6 @@ else
     }
 }
 
-echo '</table></div>';
-
-echo '</div></div>';
+echo '</table></div></div>';
 
 ?>
