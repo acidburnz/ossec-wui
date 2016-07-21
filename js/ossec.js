@@ -1,22 +1,22 @@
-define(["ossec"], function() {
+define(['ossec'], function() {
     var ossec = {
         togglesection: function(tid, did) {
-            if ($(did).is(":visible")) {
+            if ($(did).is(':visible')) {
                 $(did).hide();
-                $(tid + " > div > i").text("add_circle");
+                $(tid + ' > div > i').text('add_circle');
             } else { 
                 $(did).show();
-                $(tid + " > div > i").text("remove_circle");
+                $(tid + ' > div > i').text('remove_circle');
             }
         },
 
         initsearch: function() {
             var options = {
-                format: "yyyy-mm-dd"
+                format: 'yyyy-mm-dd'
             };
 
             var optt = {
-                format: "HH:i"
+                format: 'HH:i'
             };
 
             $('#i_date_a').pickadate(options);
@@ -28,11 +28,11 @@ define(["ossec"], function() {
         
         initsearchf: function() {
             var options = {
-                format: "yyyy-mm-dd"
+                format: 'yyyy-mm-dd'
             };
 
             var optt = {
-                format: "HH:i"
+                format: 'HH:i'
             };
 
             $('#i_date_a').pickadate(options);
@@ -60,45 +60,50 @@ define(["ossec"], function() {
         },
         
         topbut: function() {
-            if ($("#topbut").is(":hidden")){
-                $("#topbut").show();    
+            if ($('#topbut').is(':hidden')){
+                $('#topbut').show();    
             }
         },
         
         scrolltop: function() {
             window.scrollTo(0,0);
-            $("#topbut").hide();
-            ossec.setscroll();
+            $('#topbut').hide();
+            setTimeout(ossec.setscroll, 500);
         },
 
         filtera: function(nid, type, nb) {
-           if ($("#st"+nid).text() === "Showing") {
-               $("#st"+nid).text("Hidding");
-               $("#sa"+nid).text("(show)");
-               $("."+type+nb).hide();
+           if ($('#st'+nid).text() === 'Showing') {
+               $('#st'+nid).text('Hidding');
+               $('#sa'+nid).text('(show)');
+               $('.'+type+nb).hide();
            } else {
-               $("#st"+nid).text("Showing");
-               $("#sa"+nid).text("(hide)");
-               $("."+type+nb).show();
+               $('#st'+nid).text('Showing');
+               $('#sa'+nid).text('(hide)');
+               $('.'+type+nb).show();
            }
         },
         
         filtertable: function(filter) {
-            $("#tfilter").val(filter);
+            $('#tfilter').val(filter);
             ossec.SimpleTableFilter('#tfilter');
             window.scrollTo(0,0);
         },
         
         SimpleTableFilter: function(input) {
             var val = new RegExp($(input).val(), 'i');
-               $("tr").hide();
-               $("tr").filter(function() {
+               $('tr').hide();
+               $('tr').filter(function() {
                    return val.test($(this).text());
                }).show();
         },
         
         cleartablefilter: function() {
             $('tr').show();
+        },
+        
+        setsearchpage: function(action) {
+            $('#setpage').val(action);
+            $('#dopage').submit();
         }
     };
     

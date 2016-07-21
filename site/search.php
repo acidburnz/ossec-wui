@@ -13,7 +13,7 @@
 /* OS PHP init */
 if (!function_exists('os_handle_start'))
 {
-    echo '<b class="text-red">You are not allowed direct access.</b>';
+    echo '<b class="red-text">You are not allowed direct access.</b>';
     return(1);
 }
 
@@ -172,7 +172,7 @@ if ($logpattern != false && $logpattern != NULL) {
 /* Rule pattern */
 $rulepattern = filter_input(INPUT_POST, 'rulepattern', FILTER_SANITIZE_STRING);
 if ($rulepattern != false && $rulepattern != NULL) {
-   if(preg_match($strpattern, $rulepattern) == true)
+   if(preg_match($strpattern, $rulepattern))
    {
        $USER_rule = $rulepattern;
        $u_rule = $USER_rule;
@@ -180,19 +180,19 @@ if ($rulepattern != false && $rulepattern != NULL) {
 }
 
 /* Src ip pattern */
-$ippattern = "/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/";
+$ippattern = "/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|[a-fA-F0-9:]{0,128}/";
 $srcip = filter_input(INPUT_POST, 'srcippattern', FILTER_SANITIZE_STRING);
 if ($srcip != false && $srcip != NULL) {
     if (preg_match($ippattern, $srcip)) {
        $USER_srcip = $srcip;
        $u_srcip = $USER_srcip;
-    }
+    } 
 }
 
 /* User pattern */
 $userpattern = filter_input(INPUT_POST, 'userpattern', FILTER_SANITIZE_STRING);
 if ($userpattern != false && $userpattern != NULL) {
-   if(preg_match($strpattern, $userpattern) == true)
+   if(preg_match($strpattern, $userpattern))
    {
        $USER_user = $userpattern;
        $u_user = $USER_user;
@@ -423,11 +423,11 @@ if($output_list == NULL || $output_list[1] == NULL)
 {
     if($used_stored == 1)
     {
-        echo "<b class='red'>Nothing returned (search expired). </b></div></div>";
+        echo "<b class='red-text'>Nothing returned (search expired). </b></div></div>";
     }
     else
     {
-        echo "<b class='red'>Nothing returned. </b><br /></div></div>";
+        echo "<b class='red-text'>Nothing returned. </b><br /></div></div>";
     }
     return(1);
 }
@@ -436,7 +436,7 @@ if($output_list == NULL || $output_list[1] == NULL)
 /* Checking for no return */
 if(!isset($output_list[0]{'count'}))
 {
-    echo '<b class="red">Nothing returned. </b></div></div>';
+    echo '<b class="red-text">Nothing returned. </b></div></div>';
     return(1);
 }
 
@@ -452,9 +452,9 @@ $real_page = ($output_list[0]{'pg'} + 1) - $USER_page;
 
 if($output_list[0]{'pg'} > 1)
 {
-    echo '<div><form name="dopage" method="post" action="index.php?f=s">';
-    echo '<input type="submit" name="search" value="First" class="btn-flat green-text text-darken-2" />
-          <input type="submit" name="search" value="Prev" class="btn-flat green-text text-darken-2" />';
+    echo '<div><form id="dopage" name="dopage" method="post" action="index.php?f=s">';
+    echo '<button class="btn-flat green-text text-darken-2" onclick="ossec.setsearchpage(\'First\')"><div class="valign-wrapper"><i class="material-icons valign">first_page</i><span class="valign">First</span></div></button>'
+       . '<button class="btn-flat green-text text-darken-2" onclick="ossec.setsearchpage(\'Prev\')"><div class="valign-wrapper"><i class="material-icons valign">chevron_left</i><span>Prev</span class="valign"></div></button>';
 
     echo 'Page <b>'.$USER_page.'</b>/'.$output_list[0]{'pg'}.' (<b>'.$output_list[0]{$real_page}.'</b>/'.$output_list[0]{'count'}.' alerts)';
 } else {
@@ -485,8 +485,9 @@ echo '
 
 if($output_list[0]{'pg'} > 1)
 {
-echo '<input type="submit" name="search" value="Next" class="btn-flat green-text text-darken-2" />
-     <input type="submit" name="search" value="Last" class="btn-flat green-text text-darken-2" />
+echo '<button class="btn-flat green-text text-darken-2" onclick="ossec.setsearchpage(\'Next\')"><div class="valign-wrapper"><span class="valign">Next</span><i class="material-icons valign">chevron_right</i></div></button>'
+   . '<button class="btn-flat green-text text-darken-2" onclick="ossec.setsearchpage(\'Last\')"><div class="valign-wrapper"><span class="valign">Last</span><i class="material-icons valign">last_page</i></div></button>';
+echo '<input id="setpage" type="hidden" name="search" />
      </form></div>';
 }
 
@@ -497,7 +498,7 @@ if(!isset($output_list[0]{$real_page}) ||
    (strlen($output_list[$real_page]) < 5) ||
    (!file_exists($output_list[$real_page])))
 {
-    echo "<b class='red'>Nothing returned (or search expired). </b><br />\n";
+    echo "<b class='red-text'>Nothing returned (or search expired). </b><br />\n";
     return(1);
 }
 
